@@ -1,0 +1,91 @@
+---
+title: "ST558 - Project 1"
+authors: Brian Rabe and Michelle Silveira
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+## Introduction
+
+The general goal of this project is to build functions to query the Public Use Microdata Sample (PUMS) Census API and to do some simple analysis and plotting of this data. Our goal is to build functions which allow a user to modify arguments in the function to determine what data are returned from the query. The project is broken down into steps, starting with data processing, which addresses the query process, and then moves on to summarizing and testing steps. 
+
+
+## Data Processing
+Here we build the query process. 
+We start by loading relevant packages.
+
+```{r}
+library(tidyverse)
+library(httr)
+library(jsonlite)
+```
+
+Next, we start our data processing step by getting the process to work with a particular URL. We will use the URL provided on page 3 of the pdf which describes the requirements for Project 1.
+
+The first step creates a string for the URL.
+
+```{r}
+URL_id <- 'https://api.census.gov/data/2022/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24'
+```
+
+The next step uses the `GET()` function from the `httr` package to get the data from the API, and uses the `str` function to view the structure of the object obatined.
+
+```{r}
+id_info <- GET(URL_id)
+str(id_info, max.level = 1)
+```
+
+We see the object obatined is a list of length 10 and that the actual data is stored in an object in the list called `content`. We can see the type of content is raw, so we need to parse the data. To start this we can combine the `rawToChar` function with the `fromJSON` function from the `jsonlite` package.
+
+```{r}
+parsed <- fromJSON(rawToChar(id_info$content))
+class(parsed)
+head(parsed)
+```
+
+From the printout of the `parsed` object, we see that it is a character matrix with the column names assuming the first row of the matrix. In the next step we fix this by removing the first row and assigning it as the names of the object.
+
+```{r}
+parsed_data <- parsed[2:nrow(parsed),]
+colnames(parsed_data) <- parsed[1,]
+head(parsed_data)
+```
+
+Now that the matrix is in the desired form, we use the `as_tibble()` function from the `dplyr` package to convert it into a tibble.
+
+```{r}
+parsed_final <- as_tibble(parsed_data)
+parsed_final
+```
+
+Now we have our desired result for a particular example URL.
+
+In the next step, we write a helper function which takes an arbitrary URL (appropriate for API query) as an argument and returns a nice tibble. To do so, we will simply make slight modifications to the preceding code which performs this task for a particular URL.
+
+```{r}
+helper <- function(URL){
+  id_info <- GET(URL)
+  parsed <- fromJSON(rawToChar(id_info$content))
+  parsed_data <- parsed[2:nrow(parsed),]
+  colnames(parsed_data) <- parsed[1,]
+  parsed_final <- as_tibble(parsed_data)
+  parsed_final
+}
+```
+
+We test the helper function on 2023 public use microdata and see it functions as desired.
+
+```{r}
+helper('https://api.census.gov/data/2023/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24')
+```
+
+We see from the output that the function behaves as desired.
+
+Our next task is to write a function to query the API that allows the user to change the items in the fashion laid out in the pdf for Project 1 description: year of survey, numeric variables to be returned, categorical variables to be returned, geography level, and an optional argument to subset the data.
+
+
+
+## Writing a Generic Function for Summarizing
+
+## Interesting Investigation
