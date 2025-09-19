@@ -82,7 +82,22 @@ helper('https://api.census.gov/data/2023/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24
 
 We see from the output that the function behaves as desired.
 
-Our next task is to write a function to query the API that allows the user to change the items in the fashion laid out in the pdf for Project 1 description: year of survey, numeric variables to be returned, categorical variables to be returned, geography level, and an optional argument to subset the data.
+Our next task is to write a function to query the API that allows the user to change the items in the fashion laid out in the pdf for Project 1 description. We will name the function `query`. Comments are included in the code for the function to describe what is being done at each step. 
+
+```{r}
+query <- function(year = 2022    ){
+  
+  #subsetting to be done on API call
+  
+  #A URL in the form of a string is created using the function inputs 
+  URL <- paste()
+  
+
+  #The previously created helper function is used to return the desired tibble
+  helper(URL)
+}
+```
+
 
 
 

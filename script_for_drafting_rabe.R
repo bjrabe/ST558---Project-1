@@ -34,6 +34,7 @@ helper <- function(URL){
   parsed_final
 }
 
-#We test the helper function on 2023 public use microdata and see it functions well
+#We test the helper function on 2023 public use microdata and see it functions as desired
 helper('https://api.census.gov/data/2023/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24')
+
 
