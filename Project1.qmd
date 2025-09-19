@@ -82,22 +82,48 @@ helper('https://api.census.gov/data/2023/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24
 
 We see from the output that the function behaves as desired.
 
-Our next task is to write a function to query the API that allows the user to change the items in the fashion laid out in the pdf for Project 1 description. We will name the function `query`. Comments are included in the code for the function to describe what is being done at each step. 
+Our next task is to write a function to query the API that allows the user to change the items in the fashion laid out in the pdf for Project 1 description. We will name the function `query`. Comments are included in the code for the function to describe what is being done at each step. The arguments to the function will be `year`, a character vector called `num_var` which will be a vector of the desired numeric variables listed as strings, and a character vector called `cat_var` which will be a vector of the desired categorical variables listed as strings.
 
 ```{r}
-query <- function(year = 2022    ){
+query <- function(year = 2022, num_var = c('AGEP'), cat_var = c('SEX')){
   
+  #we build up the URL one input variable at a time
+  #at each step we use ifelse() to check that the input variables belong to the allowable set of variables
+  
+  URL_1 <- ifelse(
+    year <= 2022 & year >= 2010 & as.integer(year) - year == 0, 
+    paste0('https://api.census.gov/data/', year, '/acs/acs1/pums?get=PWGTP'), 
+    stop('You must provide a year from 2010 to 2022')
+    )
+  
+  URL_2 <- ifelse(
+    FALSE %in% (num_var %in% c('AGEP', 'GASP', 'GRPIP', 'JWAP', 'JWDP', 'JWMNP')),
+    stop('You must choose numeric variables from AGEP, GASP, GRPIP, JWAP, JWDP, or JWMNP'),
+    paste(num_var, collapse = ',')
+    )
+  
+  URL_3 <- ifelse(
+    FALSE %in% (cat_var %in% c('FER', 'HHL', 'HISPEED', 'JWTRNS', 'SCH', 'SCHL', 'SEX')),
+    stop('You must choose categorical variables from FER, HHL, HISPEED, JWTRNS, SCH, SCHL, or SEX'),
+    paste(cat_var, collapse = ',')
+    )
+    
   #subsetting to be done on API call
   
-  #A URL in the form of a string is created using the function inputs 
-  URL <- paste()
+  #We paste together all the indivicual components of the URL to create a final URL 
+  URL_final <- paste(URL_1, URL_2, URL_3, sep = ',')
   
 
   #The previously created helper function is used to return the desired tibble
-  helper(URL)
+  helper(URL_final)
 }
 ```
 
+Here we test the function with the goal of returning from year 2011 the GASP, JWMNP, and FER columns.
+
+```{r}
+query(2011, c('GASP', 'JWMNP'), c('FER'))
+```
 
 
 

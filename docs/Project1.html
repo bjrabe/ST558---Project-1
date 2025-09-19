@@ -189,8 +189,8 @@ The following object is masked from 'package:purrr':
  $ all_headers:List of 1
  $ cookies    :'data.frame':    1 obs. of  7 variables:
  $ content    : raw [1:937508] 5b 5b 22 53 ...
- $ date       : POSIXct[1:1], format: "2025-09-19 19:37:12"
- $ times      : Named num [1:6] 0 0.0529 0.0857 0.1615 0.5274 ...
+ $ date       : POSIXct[1:1], format: "2025-09-19 23:15:13"
+ $ times      : Named num [1:6] 0 0.00991 0.03981 0.11955 0.38519 ...
   ..- attr(*, "names")= chr [1:6] "redirect" "namelookup" "connect" "pretransfer" ...
  $ request    :List of 7
   ..- attr(*, "class")= chr "request"
@@ -285,19 +285,60 @@ The following object is masked from 'package:purrr':
 </div>
 </div>
 <p>We see from the output that the function behaves as desired.</p>
-<p>Our next task is to write a function to query the API that allows the user to change the items in the fashion laid out in the pdf for Project 1 description. We will name the function <code>query</code>. Comments are included in the code for the function to describe what is being done at each step.</p>
+<p>Our next task is to write a function to query the API that allows the user to change the items in the fashion laid out in the pdf for Project 1 description. We will name the function <code>query</code>. Comments are included in the code for the function to describe what is being done at each step. The arguments to the function will be <code>year</code>, a character vector called <code>num_var</code> which will be a vector of the desired numeric variables listed as strings, and a character vector called <code>cat_var</code> which will be a vector of the desired categorical variables listed as strings.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>query <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">year =</span> <span class="dv">2022</span>    ){</span>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>query <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">year =</span> <span class="dv">2022</span>, <span class="at">num_var =</span> <span class="fu">c</span>(<span class="st">'AGEP'</span>), <span class="at">cat_var =</span> <span class="fu">c</span>(<span class="st">'SEX'</span>)){</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#subsetting to be done on API call</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">#A URL in the form of a string is created using the function inputs </span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  URL <span class="ot">&lt;-</span> <span class="fu">paste</span>()</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#The previously created helper function is used to return the desired tibble</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">helper</span>(URL)</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#we build up the URL one input variable at a time</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#at each step we use ifelse() to check that the input variables belong to the allowable set of variables</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  URL_1 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    year <span class="sc">&lt;=</span> <span class="dv">2022</span> <span class="sc">&amp;</span> year <span class="sc">&gt;=</span> <span class="dv">2010</span> <span class="sc">&amp;</span> <span class="fu">as.integer</span>(year) <span class="sc">-</span> year <span class="sc">==</span> <span class="dv">0</span>, </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste0</span>(<span class="st">'https://api.census.gov/data/'</span>, year, <span class="st">'/acs/acs1/pums?get=PWGTP'</span>), </span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">'You must provide a year from 2010 to 2022'</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  URL_2 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="cn">FALSE</span> <span class="sc">%in%</span> (num_var <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'AGEP'</span>, <span class="st">'GASP'</span>, <span class="st">'GRPIP'</span>, <span class="st">'JWAP'</span>, <span class="st">'JWDP'</span>, <span class="st">'JWMNP'</span>)),</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">'You must choose numeric variables from AGEP, GASP, GRPIP, JWAP, JWDP, or JWMNP'</span>),</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(num_var, <span class="at">collapse =</span> <span class="st">','</span>)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  URL_3 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    <span class="cn">FALSE</span> <span class="sc">%in%</span> (cat_var <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'FER'</span>, <span class="st">'HHL'</span>, <span class="st">'HISPEED'</span>, <span class="st">'JWTRNS'</span>, <span class="st">'SCH'</span>, <span class="st">'SCHL'</span>, <span class="st">'SEX'</span>)),</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">'You must choose categorical variables from FER, HHL, HISPEED, JWTRNS, SCH, SCHL, or SEX'</span>),</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(cat_var, <span class="at">collapse =</span> <span class="st">','</span>)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>  <span class="co">#subsetting to be done on API call</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  <span class="co">#We paste together all the indivicual components of the URL to create a final URL </span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  URL_final <span class="ot">&lt;-</span> <span class="fu">paste</span>(URL_1, URL_2, URL_3, <span class="at">sep =</span> <span class="st">','</span>)</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>  <span class="co">#The previously created helper function is used to return the desired tibble</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">helper</span>(URL_final)</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here we test the function with the goal of returning from year 2011 the GASP, JWMNP, and FER columns.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(<span class="dv">2011</span>, <span class="fu">c</span>(<span class="st">'GASP'</span>, <span class="st">'JWMNP'</span>), <span class="fu">c</span>(<span class="st">'FER'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3,112,017 × 4
+   PWGTP GASP  JWMNP FER  
+   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+ 1 13    2     0     0    
+ 2 22    2     0     2    
+ 3 56    40    0     0    
+ 4 55    40    0     0    
+ 5 88    130   0     0    
+ 6 72    130   0     0    
+ 7 40    210   0     0    
+ 8 37    10    60    0    
+ 9 115   90    15    0    
+10 109   90    30    0    
+# ℹ 3,112,007 more rows</code></pre>
+</div>
 </div>
 </section>
 <section id="writing-a-generic-function-for-summarizing" class="level2">
