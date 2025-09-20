@@ -36,7 +36,7 @@ id_info <- GET(URL_id)
 str(id_info, max.level = 1)
 ```
 
-We see the object obatined is a list of length 10 and that the actual data is stored in an object in the list called `content`. We can see the type of content is raw, so we need to parse the data. To start this we can combine the `rawToChar` function with the `fromJSON` function from the `jsonlite` package.
+We see the object obtained is a list of length 10 and that the actual data is stored in an object in the list called `content`. We can see the type of content is raw, so we need to parse the data. To start this we can combine the `rawToChar` function with the `fromJSON` function from the `jsonlite` package.
 
 ```{r}
 parsed <- fromJSON(rawToChar(id_info$content))
@@ -77,15 +77,15 @@ helper <- function(URL){
 We test the helper function on 2023 public use microdata and see it functions as desired.
 
 ```{r}
-helper('https://api.census.gov/data/2023/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24')
+test <- helper('https://api.census.gov/data/2023/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24')
 ```
 
 We see from the output that the function behaves as desired.
 
-Our next task is to write a function to query the API that allows the user to change the items in the fashion laid out in the pdf for Project 1 description. We will name the function `query`. Comments are included in the code for the function to describe what is being done at each step. The arguments to the function will be `year`, a character vector called `num_var` which will be a vector of the desired numeric variables listed as strings, and a character vector called `cat_var` which will be a vector of the desired categorical variables listed as strings.
+Our next task is to write a function to query the API that allows the user to change the items in the fashion laid out in the pdf for Project 1 description. We will name the function `query`. Comments are included in the code for the function to describe what is being done at each step. The arguments to the function will be `year` which will be taken as a double or an integer, a character vector called `num_var` which will be a vector of the desired numeric variables listed as strings, a character vector called `cat_var` which will be a vector of the desired categorical variables listed as strings, and the geography level which will be taken as a string. 
 
 ```{r}
-query <- function(year = 2022, num_var = c('AGEP'), cat_var = c('SEX')){
+query <- function(year = 2022, num_var = c('AGEP'), cat_var = c('SEX'), geography = 'all'){
   
   #we build up the URL one input variable at a time
   #at each step we use ifelse() to check that the input variables belong to the allowable set of variables
@@ -107,22 +107,34 @@ query <- function(year = 2022, num_var = c('AGEP'), cat_var = c('SEX')){
     stop('You must choose categorical variables from FER, HHL, HISPEED, JWTRNS, SCH, SCHL, or SEX'),
     paste(cat_var, collapse = ',')
     )
+  
+  ifelse(
+    FALSE %in% (geography %in% c('all', 'region', 'division', 'state')),
+    stop('You must choose a geography level from all, region, division, or state'),
+    URL_4 <- paste0('&for=', geography)
+  )
     
   #subsetting to be done on API call
   
-  #We paste together all the indivicual components of the URL to create a final URL 
-  URL_final <- paste(URL_1, URL_2, URL_3, sep = ',')
+  
+  #We paste together all the individual components of the URL to create a final URL 
+  ifelse(
+    geography == 'all',
+    URL_final <- paste(URL_1, URL_2, URL_3, sep = ','),
+    URL_final <- paste0(paste(URL_1, URL_2, URL_3, sep = ','), URL_4)
+  )
   
 
-  #The previously created helper function is used to return the desired tibble
+  #The previously created helper function is used to return the desired tibble in character form, which is stored in object data_character
   helper(URL_final)
+
 }
 ```
 
-Here we test the function with the goal of returning from year 2011 the GASP, JWMNP, and FER columns.
+Here we test the function with the goal of returning from year 2011 the GASP, JWMNP, and FER columns with the state geography specified.
 
 ```{r}
-query(2011, c('GASP', 'JWMNP'), c('FER'))
+query(2011, c('JWAP', 'JWMNP', 'AGEP'), c('FER'), geography = 'state')
 ```
 
 
