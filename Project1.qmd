@@ -6,14 +6,14 @@ editor: visual
 editor_options: 
   chunk_output_type: console
 ---
+
 ## Introduction
 
-The general goal of this project is to build functions to query the Public Use Microdata Sample (PUMS) Census API and to do some simple analysis and plotting of this data. Our goal is to build functions which allow a user to modify arguments in the function to determine what data are returned from the query. The project is broken down into steps, starting with data processing, which addresses the query process, and then moves on to summarizing and testing steps. 
-
+The primary objective of this project is to develop functions to query the Public Use Microdata Sample (PUMS) Census API and perform fundamental analysis and plotting of the resulting data. Our goal is to build functions that allow a user to modify arguments in the function to determine what data is returned from the query. The project is broken down into steps, starting with data processing, which addresses the query process, and then moves on to summarizing and testing steps.
 
 ## Data Processing
-Here we build the query process. 
-We start by loading relevant packages.
+
+Here we build the query process. We start by loading relevant packages.
 
 ```{r}
 library(tidyverse)
@@ -21,7 +21,7 @@ library(httr)
 library(jsonlite)
 ```
 
-Next, we start our data processing step by getting the process to work with a particular URL. We will use the URL provided on page 3 of the pdf which describes the requirements for Project 1.
+Next, we initiate our data processing step by setting up the process to work with a specific URL. We will use the URL provided on page 3 of the PDF, which describes the requirements for Project 1.
 
 The first step creates a string for the URL.
 
@@ -29,14 +29,14 @@ The first step creates a string for the URL.
 URL_id <- 'https://api.census.gov/data/2022/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24'
 ```
 
-The next step uses the `GET()` function from the `httr` package to get the data from the API, and uses the `str` function to view the structure of the object obatined.
+The next step uses the `GET()` function from the `httr` package to get the data from the API, and uses the `str` function to view the structure of the object obtained.
 
 ```{r}
 id_info <- GET(URL_id)
 str(id_info, max.level = 1)
 ```
 
-We see the object obtained is a list of length 10 and that the actual data is stored in an object in the list called `content`. We can see the type of content is raw, so we need to parse the data. To start this we can combine the `rawToChar` function with the `fromJSON` function from the `jsonlite` package.
+We see the object obtained is a list of length 10 and that the actual data is stored in an object in the list called `content`. We can see that the type of content is raw, so we need to parse the data. To start this we can combine the `rawToChar` function with the `fromJSON` function from the `jsonlite` package.
 
 ```{r}
 parsed <- fromJSON(rawToChar(id_info$content))
@@ -44,7 +44,7 @@ class(parsed)
 head(parsed)
 ```
 
-From the printout of the `parsed` object, we see that it is a character matrix with the column names assuming the first row of the matrix. In the next step we fix this by removing the first row and assigning it as the names of the object.
+From the printout of the `parsed` object, we see that it is a character matrix, with the column names assumed in the first row of the matrix. In the next step, we fix this by removing the first row and assigning it as the names of the object.
 
 ```{r}
 parsed_data <- parsed[2:nrow(parsed),]
@@ -61,7 +61,7 @@ parsed_final
 
 Now we have our desired result for a particular example URL.
 
-In the next step, we write a helper function which takes an arbitrary URL (appropriate for API query) as an argument and returns a nice tibble. To do so, we will simply make slight modifications to the preceding code which performs this task for a particular URL.
+In the next step, we write a helper function which takes an arbitrary URL (appropriate for API query) as an argument and returns a nice tibble. To do so, we will simply make slight modifications to the preceding code. The object obtained is a list of length 10, which takes an arbitrary URL (appropriate for a task that performs this task for a particular URL.
 
 ```{r}
 helper <- function(URL){
@@ -74,7 +74,7 @@ helper <- function(URL){
 }
 ```
 
-We test the helper function on 2023 public use microdata and see it functions as desired.
+We test the helper function on the 2023 public use microdata and see that it works as desired.
 
 ```{r}
 test <- helper('https://api.census.gov/data/2023/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24')
@@ -82,7 +82,7 @@ test <- helper('https://api.census.gov/data/2023/acs/acs1/pums?get=SEX,PWGTP,MAR
 
 We see from the output that the function behaves as desired.
 
-Our next task is to write a function to query the API that allows the user to change the items in the fashion laid out in the pdf for Project 1 description. We will name the function `query`. Comments are included in the code for the function to describe what is being done at each step. The arguments to the function will be `year` which will be taken as a double or an integer, a character vector called `num_var` which will be a vector of the desired numeric variables listed as strings, a character vector called `cat_var` which will be a vector of the desired categorical variables listed as strings, and the geography level which will be taken as a string. 
+Our next task is to write a function that queries the API, allowing the user to modify the items in the fashion laid out in the PDF for Project 1's description. We will name the function `query`. Comments are included in the code for the function to describe what is being done at each step. The arguments to the function will be `year,` which will be taken as a double or an integer, a character vector called `num_var` which will be a vector of the desired numeric variables listed as strings, a character vector called `cat_var` which will be a vector of the desired categorical variables listed as strings, and the geography level which will be taken as a string.
 
 ```{r}
 query <- function(year = 2022, num_var = c('AGEP'), cat_var = c('SEX'), geography = 'all'){
@@ -131,14 +131,136 @@ query <- function(year = 2022, num_var = c('AGEP'), cat_var = c('SEX'), geograph
 }
 ```
 
-Here we test the function with the goal of returning from year 2011 the GASP, JWMNP, and FER columns with the state geography specified.
+Here, we test the function intended to return the GASP, JWMNP, and FER columns for the year 2011, with the specified state geography.
 
 ```{r}
 query(2011, c('JWAP', 'JWMNP', 'AGEP'), c('FER'), geography = 'state')
 ```
 
-
-
 ## Writing a Generic Function for Summarizing
+
+Creating a summary function 
+```{r}
+summary.census <- function(object, num = NULL, cat = NULL, ...) {
+  stopifnot(inherits(object, "census"))
+  if (!"PWGTP" %in% names(object)) stop("PWGTP column is required")
+
+  # ensure weights are numeric (API often returns characters)
+  if (!is.numeric(object$PWGTP)) {
+    suppressWarnings(object$PWGTP <- as.numeric(object$PWGTP))
+  }
+
+  # defaults: all numeric except PWGTP, all others categorical
+  is_num <- vapply(object, is.numeric, logical(1))
+  default_num <- setdiff(names(object)[is_num], "PWGTP")
+  default_cat <- names(object)[!is_num]
+
+  if (is.null(num)) num <- default_num
+  if (is.null(cat)) cat <- default_cat
+  num <- intersect(num, names(object))
+  cat <- intersect(cat, names(object))
+
+  # weighted mean and sd
+  w_mean <- function(x, w) {
+    x <- suppressWarnings(as.numeric(x))
+    w <- suppressWarnings(as.numeric(w))
+    sum(x * w, na.rm = TRUE) / sum(w, na.rm = TRUE)
+  }
+  w_sd <- function(x, w) {
+    x <- suppressWarnings(as.numeric(x))
+    w <- suppressWarnings(as.numeric(w))
+    mu <- w_mean(x, w)
+    sqrt(sum((x^2) * w, na.rm = TRUE) / sum(w, na.rm = TRUE) - mu^2)
+  }
+
+  # numeric summary
+  numeric_summary <- NULL
+  if (length(num) > 0) {
+    numeric_summary <- purrr::map_dfr(num, function(v) {
+      x <- suppressWarnings(as.numeric(object[[v]]))
+      w <- object$PWGTP
+      tibble::tibble(
+        var = v,
+        n_nonmissing = sum(!is.na(x)),
+        weight_sum   = sum(w, na.rm = TRUE),
+        w_mean       = w_mean(x, w),
+        w_sd         = w_sd(x, w)
+      )
+    })
+  }
+
+  # categorical summary
+  categorical_summary <- NULL
+  if (length(cat) > 0) {
+    categorical_summary <- purrr::map_dfr(cat, function(v) {
+      fac <- factor(object[[v]])
+      lv  <- levels(fac)
+      unwt <- as.integer(table(fac)[lv])
+      wt   <- as.numeric(tapply(object$PWGTP, fac, sum, default = 0)[lv])
+      tibble::tibble(var = v, level = lv, unweighted_n = unwt, weighted_n = wt)
+    })
+  }
+
+  out <- list(numeric_summary = numeric_summary, categorical_summary = categorical_summary)
+  class(out) <- "summary.census"
+  out
+}
+
+```
+
+Including the plot function
+```{r}
+plot.census <- function(x, num_var, cat_var, ...) {
+  stopifnot(inherits(x, "census"))
+  if (missing(num_var) || missing(cat_var)) {
+    stop("You must supply one numeric variable and one categorical variable")
+  }
+  if (!(num_var %in% names(x)) || !(cat_var %in% names(x))) {
+    stop("Variables not found in dataset")
+  }
+
+  ggplot2::ggplot(
+    x,
+    ggplot2::aes(x = .data[[cat_var]], y = as.numeric(.data[[num_var]]), weight = PWGTP)
+  ) +
+    ggplot2::geom_boxplot() +
+    ggplot2::labs(x = cat_var, y = num_var, title = paste("Weighted boxplot of", num_var, "by", cat_var))
+}
+```
+
+
+Here, we test the function using synthetic data
+```{r}
+library(tibble); library(purrr)
+
+dat <- tibble(
+  PWGTP = c(10, 20, 30, 40),
+  AGEP  = c(25, 30, 45, 50),
+  JWMNP = c(15, NA, 35, 45),
+  SEX   = factor(c("1","2","1","2")),
+  SCHL  = c("24","24","16","16")
+)
+class(dat) <- c("census", class(dat))
+
+s <- summary(dat)  # defaults: all numeric except PWGTP, all non-numeric as categoricals
+s
+s$numeric_summary
+s$categorical_summary
+
+# quick checks
+stopifnot(all(c("var","w_mean","w_sd") %in% names(s$numeric_summary)))
+stopifnot(all(c("var","level","weighted_n") %in% names(s$categorical_summary)))
+
+```
+
+Here, we test the function using query built in the previous steps
+```{r}
+df <- query(2022, num_var = c("AGEP"), cat_var = c("SEX"))
+class(df) <- c("census", class(df))
+s <- summary(df)
+s$numeric_summary
+s$categorical_summary
+
+```
 
 ## Interesting Investigation
