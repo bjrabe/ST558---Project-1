@@ -139,7 +139,8 @@ query(2011, c('JWAP', 'JWMNP', 'AGEP'), c('FER'), geography = 'state')
 
 ## Writing a Generic Function for Summarizing
 
-Creating a summary function 
+Creating a summary function
+
 ```{r}
 summary.census <- function(object, num = NULL, cat = NULL, ...) {
   stopifnot(inherits(object, 'census'))
@@ -198,23 +199,50 @@ summary.census <- function(object, num = NULL, cat = NULL, ...) {
 ```
 
 Including the plot function
+
 ```{r}
 plot.census <- function(x, num_var, cat_var, ...) {
-  stopifnot(inherits(x, 'census'))
-  if (missing(num_var) || missing(cat_var)) stop('Provide one numeric and one categorical var')
-  if (!(num_var %in% names(x)) || !(cat_var %in% names(x))) stop('Variables not found')
+  stopifnot(inherits(x, "census"))
+  if (missing(num_var) || missing(cat_var)) stop("Provide one numeric and one categorical var")
 
-  ggplot2::ggplot(
-    x,
-    ggplot2::aes(x = .data[[cat_var]], y = as.numeric(.data[[num_var]]), weight = PWGTP)
-  ) +
-    ggplot2::geom_boxplot()
+  df <- x
+  y  <- suppressWarnings(as.numeric(df[[num_var]]))
+  g  <- factor(df[[cat_var]])
+  w  <- suppressWarnings(as.numeric(df$PWGTP))
+
+  wq <- function(x, w, p) {
+    ok <- is.finite(x) & is.finite(w)
+    x <- x[ok]; w <- w[ok]
+    if (!length(x)) return(NA_real_)
+    o <- order(x); x <- x[o]; w <- w[o]
+    cw <- cumsum(w) / sum(w)
+    x[which.max(cw >= p)]
+  }
+
+  bx <- dplyr::tibble(.g = g, .y = y, .w = w) |>
+    dplyr::group_by(.g) |>
+    dplyr::summarise(
+      ymin   = wq(.y, .w, 0),
+      lower  = wq(.y, .w, .25),
+      middle = wq(.y, .w, .5),
+      upper  = wq(.y, .w, .75),
+      ymax   = wq(.y, .w, 1),
+      .groups = "drop"
+    )
+
+  ggplot2::ggplot(bx, ggplot2::aes(x = .g)) +
+    ggplot2::geom_boxplot(
+      ggplot2::aes(ymin = ymin, lower = lower, middle = middle, upper = upper, ymax = ymax),
+      stat = "identity"
+    ) +
+    ggplot2::labs(x = cat_var, y = num_var)
 }
+
 
 ```
 
-
 Here, we test the function using synthetic data
+
 ```{r}
 set.seed(1)
 dat <- tibble(
@@ -236,6 +264,7 @@ plot(dat, num_var = 'AGEP', cat_var = 'SEX')
 ```
 
 Here, we test the function using query built in the previous steps
+
 ```{r}
 # options(timeout = 120)
 
@@ -246,7 +275,34 @@ class(df) <- c('census', class(df))
 
 summary(df)
 plot(df, num_var = 'AGEP', cat_var = 'SEX')
+```
 
+Testing with smaller sample
+
+```{r}
+# 1) Query
+df <- query(2022, num_var = c("AGEP"), cat_var = c("SEX"))
+
+# 2) Coerce types before filter
+for (v in c("PWGTP","AGEP")) if (v %in% names(df)) {
+  df[[v]] <- suppressWarnings(as.numeric(df[[v]]))
+}
+if ("SEX" %in% names(df)) {
+  df$SEX <- factor(df$SEX, levels = c("1","2"), labels = c("Male","Female"))
+}
+
+# 3)  checks to see if there is valid data after filters 
+sum(is.finite(df$AGEP))           # how many valid ages?
+sum(is.finite(df$PWGTP))          # how many valid weights?
+table(df$SEX, useNA = "ifany")    # levels present?
+
+# 4) filter to produce an small feasible data
+df_small <- dplyr::filter(df, is.finite(AGEP), AGEP >= 25, AGEP <= 65)
+
+# 5) Keep class and run
+class(df_small) <- c("census", class(df_small))
+summary(df_small)
+plot(df_small, num_var = "AGEP", cat_var = "SEX")
 
 ```
 
