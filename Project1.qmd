@@ -142,38 +142,27 @@ query(2011, c('JWAP', 'JWMNP', 'AGEP'), c('FER'), geography = 'state')
 Creating a summary function 
 ```{r}
 summary.census <- function(object, num = NULL, cat = NULL, ...) {
-  stopifnot(inherits(object, "census"))
-  if (!"PWGTP" %in% names(object)) stop("PWGTP column is required")
+  stopifnot(inherits(object, 'census'))
+  if (!'PWGTP' %in% names(object)) stop('PWGTP column is required')
+  if (!is.numeric(object$PWGTP)) suppressWarnings(object$PWGTP <- as.numeric(object$PWGTP))
 
-  # ensure weights are numeric (API often returns characters)
-  if (!is.numeric(object$PWGTP)) {
-    suppressWarnings(object$PWGTP <- as.numeric(object$PWGTP))
-  }
-
-  # defaults: all numeric except PWGTP, all others categorical
+  # Default selection: detect numeric via type; pass num/cat explicitly when needed
   is_num <- vapply(object, is.numeric, logical(1))
-  default_num <- setdiff(names(object)[is_num], "PWGTP")
+  default_num <- setdiff(names(object)[is_num], 'PWGTP')
   default_cat <- names(object)[!is_num]
+  if (is.null(num)) num <- default_num else num <- intersect(num, names(object))
+  if (is.null(cat)) cat <- default_cat else cat <- intersect(cat, names(object))
 
-  if (is.null(num)) num <- default_num
-  if (is.null(cat)) cat <- default_cat
-  num <- intersect(num, names(object))
-  cat <- intersect(cat, names(object))
-
-  # weighted mean and sd
   w_mean <- function(x, w) {
-    x <- suppressWarnings(as.numeric(x))
-    w <- suppressWarnings(as.numeric(w))
+    x <- suppressWarnings(as.numeric(x)); w <- suppressWarnings(as.numeric(w))
     sum(x * w, na.rm = TRUE) / sum(w, na.rm = TRUE)
   }
   w_sd <- function(x, w) {
-    x <- suppressWarnings(as.numeric(x))
-    w <- suppressWarnings(as.numeric(w))
+    x <- suppressWarnings(as.numeric(x)); w <- suppressWarnings(as.numeric(w))
     mu <- w_mean(x, w)
     sqrt(sum((x^2) * w, na.rm = TRUE) / sum(w, na.rm = TRUE) - mu^2)
   }
 
-  # numeric summary
   numeric_summary <- NULL
   if (length(num) > 0) {
     numeric_summary <- purrr::map_dfr(num, function(v) {
@@ -189,20 +178,20 @@ summary.census <- function(object, num = NULL, cat = NULL, ...) {
     })
   }
 
-  # categorical summary
   categorical_summary <- NULL
   if (length(cat) > 0) {
     categorical_summary <- purrr::map_dfr(cat, function(v) {
       fac <- factor(object[[v]])
       lv  <- levels(fac)
       unwt <- as.integer(table(fac)[lv])
-      wt   <- as.numeric(tapply(object$PWGTP, fac, sum, default = 0)[lv])
+      wt <- tapply(object$PWGTP, fac, sum)
+      wt <- as.numeric(wt[lv]); wt[is.na(wt)] <- 0
       tibble::tibble(var = v, level = lv, unweighted_n = unwt, weighted_n = wt)
     })
   }
 
   out <- list(numeric_summary = numeric_summary, categorical_summary = categorical_summary)
-  class(out) <- "summary.census"
+  class(out) <- 'summary.census'
   out
 }
 
@@ -211,55 +200,54 @@ summary.census <- function(object, num = NULL, cat = NULL, ...) {
 Including the plot function
 ```{r}
 plot.census <- function(x, num_var, cat_var, ...) {
-  stopifnot(inherits(x, "census"))
-  if (missing(num_var) || missing(cat_var)) {
-    stop("You must supply one numeric variable and one categorical variable")
-  }
-  if (!(num_var %in% names(x)) || !(cat_var %in% names(x))) {
-    stop("Variables not found in dataset")
-  }
+  stopifnot(inherits(x, 'census'))
+  if (missing(num_var) || missing(cat_var)) stop('Provide one numeric and one categorical var')
+  if (!(num_var %in% names(x)) || !(cat_var %in% names(x))) stop('Variables not found')
 
   ggplot2::ggplot(
     x,
     ggplot2::aes(x = .data[[cat_var]], y = as.numeric(.data[[num_var]]), weight = PWGTP)
   ) +
-    ggplot2::geom_boxplot() +
-    ggplot2::labs(x = cat_var, y = num_var, title = paste("Weighted boxplot of", num_var, "by", cat_var))
+    ggplot2::geom_boxplot()
 }
+
 ```
 
 
 Here, we test the function using synthetic data
 ```{r}
-library(tibble); library(purrr)
-
+set.seed(1)
 dat <- tibble(
   PWGTP = c(10, 20, 30, 40),
   AGEP  = c(25, 30, 45, 50),
   JWMNP = c(15, NA, 35, 45),
-  SEX   = factor(c("1","2","1","2")),
-  SCHL  = c("24","24","16","16")
+  SEX   = factor(c('1','2','1','2')),
+  SCHL  = c('24','24','16','16')
 )
-class(dat) <- c("census", class(dat))
+class(dat) <- c('census', class(dat))
 
-s <- summary(dat)  # defaults: all numeric except PWGTP, all non-numeric as categoricals
+s <- summary(dat)
 s
-s$numeric_summary
-s$categorical_summary
+stopifnot(all(c('var','w_mean','w_sd') %in% names(s$numeric_summary)))
+stopifnot(all(c('var','level','weighted_n') %in% names(s$categorical_summary)))
 
-# quick checks
-stopifnot(all(c("var","w_mean","w_sd") %in% names(s$numeric_summary)))
-stopifnot(all(c("var","level","weighted_n") %in% names(s$categorical_summary)))
+plot(dat, num_var = 'AGEP', cat_var = 'SEX')
 
 ```
 
 Here, we test the function using query built in the previous steps
 ```{r}
-df <- query(2022, num_var = c("AGEP"), cat_var = c("SEX"))
-class(df) <- c("census", class(df))
-s <- summary(df)
-s$numeric_summary
-s$categorical_summary
+# Smaller payloads are more reliable; add options(timeout = 120) if needed
+# options(timeout = 120)
+
+df <- query(2022, num_var = c('AGEP'), cat_var = c('SEX'))
+# Ensure numeric for safety if helper is bypassed elsewhere
+for (v in c('PWGTP','AGEP')) if (v %in% names(df)) df[[v]] <- suppressWarnings(as.numeric(df[[v]]))
+class(df) <- c('census', class(df))
+
+summary(df)
+plot(df, num_var = 'AGEP', cat_var = 'SEX')
+
 
 ```
 
