@@ -237,11 +237,10 @@ plot(dat, num_var = 'AGEP', cat_var = 'SEX')
 
 Here, we test the function using query built in the previous steps
 ```{r}
-# Smaller payloads are more reliable; add options(timeout = 120) if needed
 # options(timeout = 120)
 
 df <- query(2022, num_var = c('AGEP'), cat_var = c('SEX'))
-# Ensure numeric for safety if helper is bypassed elsewhere
+# Ensure numeric type
 for (v in c('PWGTP','AGEP')) if (v %in% names(df)) df[[v]] <- suppressWarnings(as.numeric(df[[v]]))
 class(df) <- c('census', class(df))
 
