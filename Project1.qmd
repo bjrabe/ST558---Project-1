@@ -6,19 +6,20 @@ editor: visual
 editor_options: 
   chunk_output_type: console
 ---
+
 ## Introduction
 
-The general goal of this project is to build functions to query the Public Use Microdata Sample (PUMS) Census API and to do some simple analysis and plotting of this data. Our goal is to build functions which allow a user to modify arguments in the function to determine what data are returned from the query. The project is broken down into steps, starting with data processing, which addresses the query process, and then moves on to summarizing and testing steps. 
-
+The general goal of this project is to build functions to query the Public Use Microdata Sample (PUMS) Census API and to do some simple analysis and plotting of this data. Our goal is to build functions which allow a user to modify arguments in the function to determine what data are returned from the query. The project is broken down into steps, starting with data processing, which addresses the query process, and then moves on to summarizing and testing steps.
 
 ## Data Processing
-Here we build the query process. 
-We start by loading relevant packages.
+
+Here we build the query process. We start by loading relevant packages.
 
 ```{r}
 library(tidyverse)
 library(httr)
 library(jsonlite)
+library(lubridate)
 ```
 
 Next, we start our data processing step by getting the process to work with a particular URL. We will use the URL provided on page 3 of the pdf which describes the requirements for Project 1.
@@ -82,12 +83,134 @@ test <- helper('https://api.census.gov/data/2023/acs/acs1/pums?get=SEX,PWGTP,MAR
 
 We see from the output that the function behaves as desired.
 
-Our next task is to write a function to query the API that allows the user to change the items in the fashion laid out in the pdf for Project 1 description. We will name the function `query`. Comments are included in the code for the function to describe what is being done at each step. The arguments to the function will be `year` which will be taken as a double or an integer, a character vector called `num_var` which will be a vector of the desired numeric variables listed as strings, a character vector called `cat_var` which will be a vector of the desired categorical variables listed as strings, and the geography level which will be taken as a string. 
+Our next task is to write a function to query the API that allows the user to change the items in the fashion laid out in the pdf for Project 1 description. We will name the function `query`. Comments are included in the code for the function to describe what is being done at each step.
+
+The arguments to the function will be `year`, `num_var`, `cat_var`, and `geography`. In the list that follows we explain what can be passed to each argument.
+
+1.  `year`: User provides the desired year in the form of an integer or double.
+
+2.  `num_var`: User provides the desired numeric variables in the form of a character vector. As an example, provide `c('GASP', 'JWAP')` to the `num_var`argument to return the variables GASP and JWAP in the tibble. PWGTP will always be returned in the tibble even if not explicitly requested. AGEP and PWGTP are the default numeric variables returned in the tibble if no `num_var` argument is provided. Note that the time variables JWAP and JWDP are returned in military time so the result can be numeric. A result of NA means 'not a worker or worked from home.'
+
+3.  `cat_var`: User provides the desired categorical variables in the form of a character vector. As an example, provide `c('FER', 'HHL')` to the `cat_var` argument to return the variables FER and HHL in the tibble. SEX is the default categorical variable returned in the tibble if no `cat_var` argument is provided. 
+
+4.  `geography`: This is a rather flexible argument. The user can specify a specific state, region, or division to filter the data by. If a state, region, or division is passed to this argument, only the data from that state/region/division will be returned in the tibble. The desired state, region, or division should be passed to the argument as a string. The set of allowable states, regions, and divisions can be found at https://api.census.gov/data/2022/acs/acs1/pums/variables.html. The user must provide the state name itself, not the state code or the state abbreviation. The regions and divisions must be typed precisely as listed on the provided Census website; otherwise an error will be thrown. If the user wishes not to filter by state/region/division, but rather, to return all data values with the state specified in a column of the tibble, they should pass the argument 'State' to `geography`. Likewise they can pass 'Region' or 'Division' to the `geography` argument to return a Region or Division column without filtering. Finally, if the argument 'All' is passed to `geography`, all data will be returned with no filtering and no geography column.
 
 ```{r}
-query <- function(year = 2022, num_var = c('AGEP'), cat_var = c('SEX'), geography = 'all'){
+query <- function(year = 2022, num_var = c('AGEP'), cat_var = c('SEX'), geography = 'Iowa'){
   
-  #we build up the URL one input variable at a time
+  #Create lookup lists for state, region, and division
+  state_lookup <- list(
+  "Alabama" = 01,
+  "Utah" = 49,
+  "Kentucky" = 21,
+  "Michigan" = 26,
+  "Missouri" = 29,
+  "Nevada" = 32,
+  "New Jersey" = 34,
+  "Colorado" = 08,
+  "Virginia" = 51,
+  "Ohio" = 39,
+  "Alaska" = 02,
+  "South Dakota" = 46,
+  "Arizona" = 04,
+  "California" = 06,
+  "Wisconsin" = 55,
+  "Hawaii" = 15,
+  "Louisiana" = 22,
+  "Montana" = 30,
+  "Tennessee" = 47,
+  "Texas" = 48,
+  "Connecticut" = 09,
+  "Vermont" = 50,
+  "Washington" = 53,
+  "Illinois" = 17,
+  "Kansas" = 20,
+  "Puerto Rico" = 72,
+  "New Mexico" = 35,
+  "New York" = 36,
+  "Delaware" = 10,
+  "District of Columbia" = 11,
+  "Florida" = 12,
+  "Wyoming" = 56,
+  "Idaho" = 16,
+  "Massachusetts" = 25,
+  "Minnesota" = 27,
+  "Pennsylvania" = 42,
+  "South Carolina" = 45,
+  "Georgia" = 13,
+  "Maine" = 23,
+  "Maryland" = 24,
+  "Mississippi" = 28,
+  "North Carolina" = 37,
+  "Oregon" = 41,
+  "Arkansas" = 05,
+  "Iowa" = 19,
+  "Nebraska" = 31,
+  "New Hampshire" = 33,
+  "Rhode Island" = 44,
+  "West Virginia" = 54,
+  "Indiana" = 18,
+  "North Dakota" = 38,
+  "Oklahoma" = 40
+)
+  
+  region_lookup <- list(
+    "Northeast" = 1,
+    "Puerto Rico" = 9,
+    "South" = 3,
+    "Midwest" = 2,
+    "West" = 4
+  )
+  
+  division_lookup <- list(
+    "West South Central (South Region)" = 7,
+    "Middle Atlantic (Northeast region)" = 2,
+    "West North Central (Midwest region)" = 4,
+    "East South Central (South region)" = 6,
+    "East North Central (Midwest region)" = 3,
+    "Pacific (West region)" = 9,
+    "Puerto Rico" = 0,
+    "South Atlantic (South region)" = 5,
+    "Mountain (West region)" = 8,
+    "New England (Northeast region)" = 1
+  )
+  
+  #Create a lookup vector for JWAP variable 
+  JWAP_start <- fromJSON('https://api.census.gov/data/2022/acs/acs1/pums/variables/JWAP.json')
+
+JWAP_start <- fromJSON('https://api.census.gov/data/2022/acs/acs1/pums/variables/JWAP.json')
+
+JWAP_start <- JWAP_start$values[[1]]
+
+init_vec <- 1:length(JWAP_start)
+
+for (i in 1:length(JWAP_start)){
+  v <- stringr::str_split(JWAP_start[[i]], ' to')
+  init_vec[i] <- v[[1]][1]
+}
+
+init_vec[212] <- NA
+
+time_vec <- hm(1:length(init_vec), quiet = T)
+
+for (i in 1:length(init_vec)){
+  v <- stringr::str_split(init_vec[i], ' ')
+  ifelse(v[[1]][2] == 'a.m.',
+         time_vec[i] <- hm(v[[1]][1], quiet = T),
+         time_vec[i] <- hm(v[[1]][1], quiet = T) + hours(12))
+
+}
+
+time_vec <- time_vec + minutes(2)
+JWAP_lookup <- sort(time_vec, na.last = F)
+JWAP_lookup[275:length(JWAP_lookup)] <- JWAP_lookup[275:length(JWAP_lookup)] - hours(24)
+
+JWAP_lookup <- sort(JWAP_lookup, na.last = F)
+
+  #Create a lookup list for JWDP variable
+
+  
+  #Now we build up the URL one input variable at a time
   #at each step we use ifelse() to check that the input variables belong to the allowable set of variables
   
   URL_1 <- ifelse(
@@ -98,46 +221,132 @@ query <- function(year = 2022, num_var = c('AGEP'), cat_var = c('SEX'), geograph
   
   URL_2 <- ifelse(
     FALSE %in% (num_var %in% c('AGEP', 'GASP', 'GRPIP', 'JWAP', 'JWDP', 'JWMNP')),
-    stop('You must choose numeric variables from AGEP, GASP, GRPIP, JWAP, JWDP, or JWMNP'),
+    stop('You must choose numeric variables from AGEP, GASP, GRPIP, JWAP, JWDP, or JWMNP and pass them to the num_var argument as a character vector of the desired variables.'),
     paste(num_var, collapse = ',')
     )
   
   URL_3 <- ifelse(
     FALSE %in% (cat_var %in% c('FER', 'HHL', 'HISPEED', 'JWTRNS', 'SCH', 'SCHL', 'SEX')),
-    stop('You must choose categorical variables from FER, HHL, HISPEED, JWTRNS, SCH, SCHL, or SEX'),
+    stop('You must choose categorical variables from FER, HHL, HISPEED, JWTRNS, SCH, SCHL, or SEX and pass them to the cat_var argument as a character vector of the desired variables.'),
     paste(cat_var, collapse = ',')
     )
   
-  ifelse(
-    FALSE %in% (geography %in% c('all', 'region', 'division', 'state')),
-    stop('You must choose a geography level from all, region, division, or state'),
-    URL_4 <- paste0('&for=', geography)
-  )
-    
-  #subsetting to be done on API call
+  URL_4 <- ifelse(geography %in% names(state_lookup), 
+       paste0('&for=state:', state_lookup[[geography]]),
+       ifelse(geography %in% names(region_lookup),
+              paste0('&for=region:', region_lookup[[geography]]),
+              ifelse(geography %in% names(division_lookup),
+                     paste0('&for=division:', division_lookup[[geography]]),
+                     ifelse(geography == 'State',
+                            paste0('&for=state:', '*'),
+                            ifelse(geography == 'Region',
+                                   paste0('&for=region:', '*'),
+                                   ifelse(geography == 'Division',
+                                          paste0('&for=division:', '*'),
+                                          ifelse(geography == 'All',
+                                          '',
+                                          stop('You must choose an appropriate state, region, or division you wish to filter by (must be entered as a string). See https://api.census.gov/data/2022/acs/acs1/pums/variables.html for the allowable list of states, regions, and divisions. Or you should choose geography = \'State\' to get all the states, geography = \'Region\' to get all the regions, or geography = \'Division\' to get all the divisions. To return all values with no geography specified you should choose geography = \'All\'')
+      )))))))
+              
   
   
   #We paste together all the individual components of the URL to create a final URL 
-  ifelse(
-    geography == 'all',
-    URL_final <- paste(URL_1, URL_2, URL_3, sep = ','),
-    URL_final <- paste0(paste(URL_1, URL_2, URL_3, sep = ','), URL_4)
-  )
+  URL_final <- paste0(paste(URL_1, URL_2, URL_3, sep = ','), URL_4)
   
 
   #The previously created helper function is used to return the desired tibble in character form, which is stored in object data_character
-  helper(URL_final)
+  return_tbl <- helper(URL_final)
+  
+  
+  #return_tbl is the desired tibble but all data is in character form. Next we change each column to the appropriate data type
+  for (i in names(return_tbl)){
+    if (i %in% c('PWGTP', 'AGEP', 'GASP', 'GRPIP', 'JWMNP')){
+      return_tbl[[i]] <- as.numeric(return_tbl[[i]])
+    } 
+    if (i %in% c('FER', 'HHL', 'HISPEED', 'JWTRNS', 'SCH', 'SCHL', 'SEX')){
+      return_tbl[[i]] <- as.factor(return_tbl[[i]])
+    }
+  }
+   
+  if ('JWAP' %in% names(return_tbl)){
+      return_tbl$JWAP <- as.numeric(return_tbl$JWAP)
+      return_tbl <- mutate(return_tbl, JWAP = JWAP_lookup[JWAP + 1])
+    }
 
+  if ('JWDP' %in% names(return_tbl)){
+      ***
+    }
+  
+  #Change factor names
+  if ('FER' %in% names(return_tbl)){
+    return_tbl$FER <- recode(return_tbl$FER, '0' = "N/A (less than 15 years/greater than 50 years/ male)",  '1' = 'Yes', '2' = 'No')
+  }
+  
+  if ('HHL' %in% names(return_tbl)){
+    return_tbl$HHL <- recode(return_tbl$HHL, '0' = "N/A (GQ/vacant)",  '1' = 'English Only', '2' = 'Spanish', '3' = 'Other Indo-European languages', '4' = "Asian and Pacific Island languages", '5' = "Other Language")
+  }
+  
+  if ('HISPEED' %in% names(return_tbl)){
+    return_tbl$HISPEED <- recode(return_tbl$HISPEED, '0' = "N/A (GQ/vacant/no paid access to the internet)", '1' = "Yes", '2' = "No")
+  }
+  
+  
+  if ('JWTRNS' %in% names(return_tbl)){
+    return_tbl$JWTRNS <- recode(return_tbl$JWTRNS, '0' = "N/A (not a worker-not in the labor force, including persons under 16 years; unemployed; employed, with a job but not at work; Armed Forces, with a job but not at work)",  '1' = 'Car, truck, or van', '2' = 'Bus', '3' = 'Subway or elevated rail', '4' = "Long-distance train or commuter rail", '5' = "Light rail, streetcar, or trolley", '6' = 'Ferryboat', "07" = "Taxicab", "08" = "Motorcycle", "09" = "Bicycle",  "10" = "Walked", "11" = "Worked from home", "12" = "Other method")
+  }
+  
+  if ('SCH' %in% names(return_tbl)){
+    return_tbl$SCH <- recode(return_tbl$SCH, '0' = "N/A (less than 3 years old)",  '1' = 'No, has not attended in the last 3 months', '2' = 'Yes, public school or public college', '3' = 'Yes, private school or college or home school')
+  }
+  
+  if ('SCHL' %in% names(return_tbl)){
+    return_tbl$SCHL <- recode(return_tbl$SCHL,
+                              "16" = "Regular high school diploma",
+                              "1" = "No schooling completed",
+                              "4" = "Grade 1",
+                              "3" = "Kindergarten",
+                              "7" = "Grade 4",
+                              "23" = "Professional degree beyond a bachelor's degree",
+                              "19" = "1 or more years of college credit, no degree",
+                              "22" = "Master's degree",
+                              "10" = "Grade 7",
+                              "20" = "Associate's degree",
+                              "0" = "N/A (less than 3 years old)",
+                              "2" = "Nursery school, preschool",
+                              "21" = "Bachelor's degree",
+                              "8" = "Grade 5",
+                              "24" = "Doctorate degree",
+                              "6" = "Grade 3",
+                              "14" = "Grade 11",
+                              "17" = "GED or alternative credential",
+                              "12" = "Grade 9",
+                              "15" = "12th grade - no diploma",
+                              "13" = "Grade 10",
+                              "5" = "Grade 2",
+                              "11" = "Grade 8",
+                              "18" = "Some college, but less than 1 year",
+                              "9" = "Grade 6")
+  }
+  
+  if ('SEX' %in% names(return_tbl)){
+    return_tbl$SEX <- recode(return_tbl$SEX,
+                             "1" = "Male",
+                             "2" = "Female")
+  }
+  
+  
+  
+  #finally we return the desired tibble
+  return_tbl
+  
 }
 ```
 
-Here we test the function with the goal of returning from year 2011 the GASP, JWMNP, and FER columns with the state geography specified.
+Here we test the function.
 
 ```{r}
-query(2011, c('JWAP', 'JWMNP', 'AGEP'), c('FER'), geography = 'state')
+query(2022, c('JWAP', 'AGEP'))
 ```
-
-
 
 ## Writing a Generic Function for Summarizing
 
