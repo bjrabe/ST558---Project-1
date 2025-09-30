@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>ST558 - Project 1</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-991b1886d3c685c7aa2b62b80640c7af.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">ST558 - Project 1</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Brian Rabe and Michelle Silveira </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>The general goal of this project is to build functions to query the Public Use Microdata Sample (PUMS) Census API and to do some simple analysis and plotting of this data. Our goal is to build functions which allow a user to modify arguments in the function to determine what data are returned from the query. The project is broken down into steps, starting with data processing, which addresses the query process, and then moves on to summarizing and testing steps.</p>
+</section>
+<section id="data-processing" class="level2">
+<h2 class="anchored" data-anchor-id="data-processing">Data Processing</h2>
+<p>Here we build the query process. We start by loading relevant packages.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyverse' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tibble' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyr' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'readr' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'purrr' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'stringr' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'forcats' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'lubridate' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.4     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'httr' was built under R version 4.4.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'jsonlite' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'jsonlite'
+
+The following object is masked from 'package:purrr':
+
+    flatten</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we start our data processing step by getting the process to work with a particular URL. We will use the URL provided on page 3 of the pdf which describes the requirements for Project 1.</p>
+<p>The first step creates a string for the URL.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>URL_id <span class="ot">&lt;-</span> <span class="st">'https://api.census.gov/data/2022/acs/acs1/pums?get=SEX,PWGTP,MAR&amp;SCHL=24'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The next step uses the <code>GET()</code> function from the <code>httr</code> package to get the data from the API, and uses the <code>str</code> function to view the structure of the object obatined.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>id_info <span class="ot">&lt;-</span> <span class="fu">GET</span>(URL_id)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(id_info, <span class="at">max.level =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 10
+ $ url        : chr "https://api.census.gov/data/2022/acs/acs1/pums?get=SEX,PWGTP,MAR&amp;SCHL=24"
+ $ status_code: int 200
+ $ headers    :List of 12
+  ..- attr(*, "class")= chr [1:2] "insensitive" "list"
+ $ all_headers:List of 1
+ $ cookies    :'data.frame':    1 obs. of  7 variables:
+ $ content    : raw [1:937508] 5b 5b 22 53 ...
+ $ date       : POSIXct[1:1], format: "2025-09-30 03:37:23"
+ $ times      : Named num [1:6] 0 0.0106 0.0474 0.1048 0.3191 ...
+  ..- attr(*, "names")= chr [1:6] "redirect" "namelookup" "connect" "pretransfer" ...
+ $ request    :List of 7
+  ..- attr(*, "class")= chr "request"
+ $ handle     :Class 'curl_handle' &lt;externalptr&gt; 
+ - attr(*, "class")= chr "response"</code></pre>
+</div>
+</div>
+<p>We see the object obtained is a list of length 10 and that the actual data is stored in an object in the list called <code>content</code>. We can see the type of content is raw, so we need to parse the data. To start this we can combine the <code>rawToChar</code> function with the <code>fromJSON</code> function from the <code>jsonlite</code> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>parsed <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="fu">rawToChar</span>(id_info<span class="sc">$</span>content))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(parsed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "matrix" "array" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(parsed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1]  [,2]    [,3]  [,4]  
+[1,] "SEX" "PWGTP" "MAR" "SCHL"
+[2,] "2"   "6"     "5"   "24"  
+[3,] "2"   "23"    "2"   "24"  
+[4,] "1"   "23"    "3"   "24"  
+[5,] "1"   "80"    "5"   "24"  
+[6,] "1"   "16"    "1"   "24"  </code></pre>
+</div>
+</div>
+<p>From the printout of the <code>parsed</code> object, we see that it is a character matrix with the column names assuming the first row of the matrix. In the next step we fix this by removing the first row and assigning it as the names of the object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>parsed_data <span class="ot">&lt;-</span> parsed[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(parsed),]</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(parsed_data) <span class="ot">&lt;-</span> parsed[<span class="dv">1</span>,]</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(parsed_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     SEX PWGTP MAR SCHL
+[1,] "2" "6"   "5" "24"
+[2,] "2" "23"  "2" "24"
+[3,] "1" "23"  "3" "24"
+[4,] "1" "80"  "5" "24"
+[5,] "1" "16"  "1" "24"
+[6,] "1" "107" "3" "24"</code></pre>
+</div>
+</div>
+<p>Now that the matrix is in the desired form, we use the <code>as_tibble()</code> function from the <code>dplyr</code> package to convert it into a tibble.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>parsed_final <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(parsed_data)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>parsed_final</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 44,079 × 4
+   SEX   PWGTP MAR   SCHL 
+   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+ 1 2     6     5     24   
+ 2 2     23    2     24   
+ 3 1     23    3     24   
+ 4 1     80    5     24   
+ 5 1     16    1     24   
+ 6 1     107   3     24   
+ 7 2     10    5     24   
+ 8 1     22    1     24   
+ 9 2     127   5     24   
+10 2     46    5     24   
+# ℹ 44,069 more rows</code></pre>
+</div>
+</div>
+<p>Now we have our desired result for a particular example URL.</p>
+<p>In the next step, we write a helper function which takes an arbitrary URL (appropriate for API query) as an argument and returns a nice tibble. To do so, we will simply make slight modifications to the preceding code which performs this task for a particular URL.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>helper <span class="ot">&lt;-</span> <span class="cf">function</span>(URL){</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  id_info <span class="ot">&lt;-</span> <span class="fu">GET</span>(URL)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  parsed <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="fu">rawToChar</span>(id_info<span class="sc">$</span>content))</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  parsed_data <span class="ot">&lt;-</span> parsed[<span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(parsed),]</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(parsed_data) <span class="ot">&lt;-</span> parsed[<span class="dv">1</span>,]</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  parsed_final <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(parsed_data)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  parsed_final</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We test the helper function on 2023 public use microdata and see it functions as desired.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">helper</span>(<span class="st">'https://api.census.gov/data/2023/acs/acs1/pums?get=SEX,PWGTP,MAR&amp;SCHL=24'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We see from the output that the function behaves as desired.</p>
+<p>Our next task is to write a function to query the API that allows the user to change the items in the fashion laid out in the pdf for Project 1 description. We will name the function <code>query</code>. Comments are included in the code for the function to describe what is being done at each step.</p>
+<p>The arguments to the function will be <code>year</code>, <code>num_var</code>, <code>cat_var</code>, and <code>geography</code>. In the list that follows we explain what can be passed to each argument.</p>
+<ol type="1">
+<li><p><code>year</code>: User provides the desired year in the form of an integer or double.</p></li>
+<li><p><code>num_var</code>: User provides the desired numeric variables in the form of a character vector. As an example, provide <code>c('GASP', 'JWAP')</code> to the <code>num_var</code>argument to return the variables GASP and JWAP in the tibble. PWGTP will always be returned in the tibble even if not explicitly requested. AGEP and PWGTP are the default numeric variables returned in the tibble if no <code>num_var</code> argument is provided. Note that the time variables JWAP and JWDP are returned in military time so the result can be numeric. A result of NA means ‘not a worker or worked from home.’</p></li>
+<li><p><code>cat_var</code>: User provides the desired categorical variables in the form of a character vector. As an example, provide <code>c('FER', 'HHL')</code> to the <code>cat_var</code> argument to return the variables FER and HHL in the tibble. SEX is the default categorical variable returned in the tibble if no <code>cat_var</code> argument is provided.</p></li>
+<li><p><code>geography</code>: This is a rather flexible argument. The user can specify a specific state, region, or division to filter the data by. If a state, region, or division is passed to this argument, only the data from that state/region/division will be returned in the tibble (specifically, the corresponding codes will be returned, not the actual names). The desired state, region, or division should be passed to the argument as a string. The set of allowable states, regions, and divisions can be found at https://api.census.gov/data/2022/acs/acs1/pums/variables.html. The user must provide the state name itself, not the state code or the state abbreviation. The regions and divisions must be typed precisely as listed on the provided Census website; otherwise an error will be thrown. If the user wishes not to filter by state/region/division, but rather, to return all data values with the state specified in a column of the tibble, they should pass the argument ‘State’ to <code>geography</code>. Again, this will return the state code, not the name of the state. Likewise they can pass ‘Region’ or ‘Division’ to the <code>geography</code> argument to return a Region or Division column without filtering. Finally, if the argument ‘All’ is passed to <code>geography</code>, all data will be returned with no filtering and no geography column.</p></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>query <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">year =</span> <span class="dv">2022</span>, <span class="at">num_var =</span> <span class="fu">c</span>(<span class="st">'AGEP'</span>), <span class="at">cat_var =</span> <span class="fu">c</span>(<span class="st">'SEX'</span>), <span class="at">geography =</span> <span class="st">'Iowa'</span>){</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># we start by returning error messages if the year 2020 is called (since there is no data for that year) or if JWTRNS or HISPEED and called on years they don't exist. If none of these stop criteria are met, we go to 'else' which is the rest of our function</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (year <span class="sc">==</span> <span class="dv">2020</span>){</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">'Sorry, it turns out 2020 doesn</span><span class="sc">\'</span><span class="st">t have any data. Please choose a different year.'</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (year <span class="sc">&lt;</span> <span class="dv">2016</span> <span class="sc">&amp;</span> <span class="st">'HISPEED'</span> <span class="sc">%in%</span> cat_var){</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">'Sorry, the HISPEED variable is not available before 2016.'</span>)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (year <span class="sc">&lt;</span> <span class="dv">2019</span> <span class="sc">&amp;</span> <span class="st">'JWTRNS'</span> <span class="sc">%in%</span> cat_var){</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">'Sorry, the JWTRNS variable is not availabe before 2019.'</span>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Create lookup lists for state, region, and division</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  state_lookup <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Alabama"</span> <span class="ot">=</span> <span class="dv">01</span>,</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Utah"</span> <span class="ot">=</span> <span class="dv">49</span>,</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Kentucky"</span> <span class="ot">=</span> <span class="dv">21</span>,</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Michigan"</span> <span class="ot">=</span> <span class="dv">26</span>,</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Missouri"</span> <span class="ot">=</span> <span class="dv">29</span>,</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Nevada"</span> <span class="ot">=</span> <span class="dv">32</span>,</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>  <span class="st">"New Jersey"</span> <span class="ot">=</span> <span class="dv">34</span>,</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Colorado"</span> <span class="ot">=</span> <span class="dv">08</span>,</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Virginia"</span> <span class="ot">=</span> <span class="dv">51</span>,</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Ohio"</span> <span class="ot">=</span> <span class="dv">39</span>,</span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Alaska"</span> <span class="ot">=</span> <span class="dv">02</span>,</span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>  <span class="st">"South Dakota"</span> <span class="ot">=</span> <span class="dv">46</span>,</span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Arizona"</span> <span class="ot">=</span> <span class="dv">04</span>,</span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>  <span class="st">"California"</span> <span class="ot">=</span> <span class="dv">06</span>,</span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Wisconsin"</span> <span class="ot">=</span> <span class="dv">55</span>,</span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Hawaii"</span> <span class="ot">=</span> <span class="dv">15</span>,</span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Louisiana"</span> <span class="ot">=</span> <span class="dv">22</span>,</span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Montana"</span> <span class="ot">=</span> <span class="dv">30</span>,</span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tennessee"</span> <span class="ot">=</span> <span class="dv">47</span>,</span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Texas"</span> <span class="ot">=</span> <span class="dv">48</span>,</span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Connecticut"</span> <span class="ot">=</span> <span class="dv">09</span>,</span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Vermont"</span> <span class="ot">=</span> <span class="dv">50</span>,</span>
+<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Washington"</span> <span class="ot">=</span> <span class="dv">53</span>,</span>
+<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Illinois"</span> <span class="ot">=</span> <span class="dv">17</span>,</span>
+<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Kansas"</span> <span class="ot">=</span> <span class="dv">20</span>,</span>
+<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Puerto Rico"</span> <span class="ot">=</span> <span class="dv">72</span>,</span>
+<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a>  <span class="st">"New Mexico"</span> <span class="ot">=</span> <span class="dv">35</span>,</span>
+<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a>  <span class="st">"New York"</span> <span class="ot">=</span> <span class="dv">36</span>,</span>
+<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Delaware"</span> <span class="ot">=</span> <span class="dv">10</span>,</span>
+<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>  <span class="st">"District of Columbia"</span> <span class="ot">=</span> <span class="dv">11</span>,</span>
+<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Florida"</span> <span class="ot">=</span> <span class="dv">12</span>,</span>
+<span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Wyoming"</span> <span class="ot">=</span> <span class="dv">56</span>,</span>
+<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Idaho"</span> <span class="ot">=</span> <span class="dv">16</span>,</span>
+<span id="cb32-47"><a href="#cb32-47" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Massachusetts"</span> <span class="ot">=</span> <span class="dv">25</span>,</span>
+<span id="cb32-48"><a href="#cb32-48" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Minnesota"</span> <span class="ot">=</span> <span class="dv">27</span>,</span>
+<span id="cb32-49"><a href="#cb32-49" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Pennsylvania"</span> <span class="ot">=</span> <span class="dv">42</span>,</span>
+<span id="cb32-50"><a href="#cb32-50" aria-hidden="true" tabindex="-1"></a>  <span class="st">"South Carolina"</span> <span class="ot">=</span> <span class="dv">45</span>,</span>
+<span id="cb32-51"><a href="#cb32-51" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Georgia"</span> <span class="ot">=</span> <span class="dv">13</span>,</span>
+<span id="cb32-52"><a href="#cb32-52" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Maine"</span> <span class="ot">=</span> <span class="dv">23</span>,</span>
+<span id="cb32-53"><a href="#cb32-53" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Maryland"</span> <span class="ot">=</span> <span class="dv">24</span>,</span>
+<span id="cb32-54"><a href="#cb32-54" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mississippi"</span> <span class="ot">=</span> <span class="dv">28</span>,</span>
+<span id="cb32-55"><a href="#cb32-55" aria-hidden="true" tabindex="-1"></a>  <span class="st">"North Carolina"</span> <span class="ot">=</span> <span class="dv">37</span>,</span>
+<span id="cb32-56"><a href="#cb32-56" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Oregon"</span> <span class="ot">=</span> <span class="dv">41</span>,</span>
+<span id="cb32-57"><a href="#cb32-57" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Arkansas"</span> <span class="ot">=</span> <span class="dv">05</span>,</span>
+<span id="cb32-58"><a href="#cb32-58" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Iowa"</span> <span class="ot">=</span> <span class="dv">19</span>,</span>
+<span id="cb32-59"><a href="#cb32-59" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Nebraska"</span> <span class="ot">=</span> <span class="dv">31</span>,</span>
+<span id="cb32-60"><a href="#cb32-60" aria-hidden="true" tabindex="-1"></a>  <span class="st">"New Hampshire"</span> <span class="ot">=</span> <span class="dv">33</span>,</span>
+<span id="cb32-61"><a href="#cb32-61" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Rhode Island"</span> <span class="ot">=</span> <span class="dv">44</span>,</span>
+<span id="cb32-62"><a href="#cb32-62" aria-hidden="true" tabindex="-1"></a>  <span class="st">"West Virginia"</span> <span class="ot">=</span> <span class="dv">54</span>,</span>
+<span id="cb32-63"><a href="#cb32-63" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Indiana"</span> <span class="ot">=</span> <span class="dv">18</span>,</span>
+<span id="cb32-64"><a href="#cb32-64" aria-hidden="true" tabindex="-1"></a>  <span class="st">"North Dakota"</span> <span class="ot">=</span> <span class="dv">38</span>,</span>
+<span id="cb32-65"><a href="#cb32-65" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Oklahoma"</span> <span class="ot">=</span> <span class="dv">40</span></span>
+<span id="cb32-66"><a href="#cb32-66" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-67"><a href="#cb32-67" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-68"><a href="#cb32-68" aria-hidden="true" tabindex="-1"></a>  region_lookup <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb32-69"><a href="#cb32-69" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Northeast"</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb32-70"><a href="#cb32-70" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Puerto Rico"</span> <span class="ot">=</span> <span class="dv">9</span>,</span>
+<span id="cb32-71"><a href="#cb32-71" aria-hidden="true" tabindex="-1"></a>    <span class="st">"South"</span> <span class="ot">=</span> <span class="dv">3</span>,</span>
+<span id="cb32-72"><a href="#cb32-72" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Midwest"</span> <span class="ot">=</span> <span class="dv">2</span>,</span>
+<span id="cb32-73"><a href="#cb32-73" aria-hidden="true" tabindex="-1"></a>    <span class="st">"West"</span> <span class="ot">=</span> <span class="dv">4</span></span>
+<span id="cb32-74"><a href="#cb32-74" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb32-75"><a href="#cb32-75" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-76"><a href="#cb32-76" aria-hidden="true" tabindex="-1"></a>  division_lookup <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb32-77"><a href="#cb32-77" aria-hidden="true" tabindex="-1"></a>    <span class="st">"West South Central (South Region)"</span> <span class="ot">=</span> <span class="dv">7</span>,</span>
+<span id="cb32-78"><a href="#cb32-78" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Middle Atlantic (Northeast region)"</span> <span class="ot">=</span> <span class="dv">2</span>,</span>
+<span id="cb32-79"><a href="#cb32-79" aria-hidden="true" tabindex="-1"></a>    <span class="st">"West North Central (Midwest region)"</span> <span class="ot">=</span> <span class="dv">4</span>,</span>
+<span id="cb32-80"><a href="#cb32-80" aria-hidden="true" tabindex="-1"></a>    <span class="st">"East South Central (South region)"</span> <span class="ot">=</span> <span class="dv">6</span>,</span>
+<span id="cb32-81"><a href="#cb32-81" aria-hidden="true" tabindex="-1"></a>    <span class="st">"East North Central (Midwest region)"</span> <span class="ot">=</span> <span class="dv">3</span>,</span>
+<span id="cb32-82"><a href="#cb32-82" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pacific (West region)"</span> <span class="ot">=</span> <span class="dv">9</span>,</span>
+<span id="cb32-83"><a href="#cb32-83" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Puerto Rico"</span> <span class="ot">=</span> <span class="dv">0</span>,</span>
+<span id="cb32-84"><a href="#cb32-84" aria-hidden="true" tabindex="-1"></a>    <span class="st">"South Atlantic (South region)"</span> <span class="ot">=</span> <span class="dv">5</span>,</span>
+<span id="cb32-85"><a href="#cb32-85" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Mountain (West region)"</span> <span class="ot">=</span> <span class="dv">8</span>,</span>
+<span id="cb32-86"><a href="#cb32-86" aria-hidden="true" tabindex="-1"></a>    <span class="st">"New England (Northeast region)"</span> <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb32-87"><a href="#cb32-87" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb32-88"><a href="#cb32-88" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-89"><a href="#cb32-89" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Create a lookup vector for JWAP variable </span></span>
+<span id="cb32-90"><a href="#cb32-90" aria-hidden="true" tabindex="-1"></a>  JWAP_start <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">'https://api.census.gov/data/2022/acs/acs1/pums/variables/JWAP.json'</span>)</span>
+<span id="cb32-91"><a href="#cb32-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-92"><a href="#cb32-92" aria-hidden="true" tabindex="-1"></a>JWAP_start <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">'https://api.census.gov/data/2022/acs/acs1/pums/variables/JWAP.json'</span>)</span>
+<span id="cb32-93"><a href="#cb32-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-94"><a href="#cb32-94" aria-hidden="true" tabindex="-1"></a>JWAP_start <span class="ot">&lt;-</span> JWAP_start<span class="sc">$</span>values[[<span class="dv">1</span>]]</span>
+<span id="cb32-95"><a href="#cb32-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-96"><a href="#cb32-96" aria-hidden="true" tabindex="-1"></a>init_vec <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(JWAP_start)</span>
+<span id="cb32-97"><a href="#cb32-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-98"><a href="#cb32-98" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(JWAP_start)){</span>
+<span id="cb32-99"><a href="#cb32-99" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">&lt;-</span> stringr<span class="sc">::</span><span class="fu">str_split</span>(JWAP_start[[i]], <span class="st">' to'</span>)</span>
+<span id="cb32-100"><a href="#cb32-100" aria-hidden="true" tabindex="-1"></a>  init_vec[i] <span class="ot">&lt;-</span> v[[<span class="dv">1</span>]][<span class="dv">1</span>]</span>
+<span id="cb32-101"><a href="#cb32-101" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-102"><a href="#cb32-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-103"><a href="#cb32-103" aria-hidden="true" tabindex="-1"></a>init_vec[<span class="dv">212</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb32-104"><a href="#cb32-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-105"><a href="#cb32-105" aria-hidden="true" tabindex="-1"></a>time_vec <span class="ot">&lt;-</span> <span class="fu">hm</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(init_vec), <span class="at">quiet =</span> T)</span>
+<span id="cb32-106"><a href="#cb32-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-107"><a href="#cb32-107" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(init_vec)){</span>
+<span id="cb32-108"><a href="#cb32-108" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">&lt;-</span> stringr<span class="sc">::</span><span class="fu">str_split</span>(init_vec[i], <span class="st">' '</span>)</span>
+<span id="cb32-109"><a href="#cb32-109" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(v[[<span class="dv">1</span>]][<span class="dv">2</span>] <span class="sc">==</span> <span class="st">'a.m.'</span>,</span>
+<span id="cb32-110"><a href="#cb32-110" aria-hidden="true" tabindex="-1"></a>         time_vec[i] <span class="ot">&lt;-</span> <span class="fu">hm</span>(v[[<span class="dv">1</span>]][<span class="dv">1</span>], <span class="at">quiet =</span> T),</span>
+<span id="cb32-111"><a href="#cb32-111" aria-hidden="true" tabindex="-1"></a>         time_vec[i] <span class="ot">&lt;-</span> <span class="fu">hm</span>(v[[<span class="dv">1</span>]][<span class="dv">1</span>], <span class="at">quiet =</span> T) <span class="sc">+</span> <span class="fu">hours</span>(<span class="dv">12</span>))</span>
+<span id="cb32-112"><a href="#cb32-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-113"><a href="#cb32-113" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-114"><a href="#cb32-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-115"><a href="#cb32-115" aria-hidden="true" tabindex="-1"></a>time_vec <span class="ot">&lt;-</span> time_vec <span class="sc">+</span> <span class="fu">minutes</span>(<span class="dv">2</span>)</span>
+<span id="cb32-116"><a href="#cb32-116" aria-hidden="true" tabindex="-1"></a>JWAP_lookup <span class="ot">&lt;-</span> <span class="fu">sort</span>(time_vec, <span class="at">na.last =</span> F)</span>
+<span id="cb32-117"><a href="#cb32-117" aria-hidden="true" tabindex="-1"></a>JWAP_lookup[<span class="dv">275</span><span class="sc">:</span><span class="fu">length</span>(JWAP_lookup)] <span class="ot">&lt;-</span> JWAP_lookup[<span class="dv">275</span><span class="sc">:</span><span class="fu">length</span>(JWAP_lookup)] <span class="sc">-</span> <span class="fu">hours</span>(<span class="dv">24</span>)</span>
+<span id="cb32-118"><a href="#cb32-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-119"><a href="#cb32-119" aria-hidden="true" tabindex="-1"></a>JWAP_lookup <span class="ot">&lt;-</span> <span class="fu">sort</span>(JWAP_lookup, <span class="at">na.last =</span> F)</span>
+<span id="cb32-120"><a href="#cb32-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-121"><a href="#cb32-121" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-122"><a href="#cb32-122" aria-hidden="true" tabindex="-1"></a><span class="co">#Create a lookup vector for JWDP variable</span></span>
+<span id="cb32-123"><a href="#cb32-123" aria-hidden="true" tabindex="-1"></a>time_lst <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb32-124"><a href="#cb32-124" aria-hidden="true" tabindex="-1"></a>  <span class="st">"014"</span> <span class="ot">=</span> <span class="st">"4:15 a.m."</span>,</span>
+<span id="cb32-125"><a href="#cb32-125" aria-hidden="true" tabindex="-1"></a>  <span class="st">"015"</span> <span class="ot">=</span> <span class="st">"4:25 a.m."</span>,</span>
+<span id="cb32-126"><a href="#cb32-126" aria-hidden="true" tabindex="-1"></a>  <span class="st">"017"</span> <span class="ot">=</span> <span class="st">"4:45 a.m."</span>,</span>
+<span id="cb32-127"><a href="#cb32-127" aria-hidden="true" tabindex="-1"></a>  <span class="st">"022"</span> <span class="ot">=</span> <span class="st">"5:17 a.m."</span>,</span>
+<span id="cb32-128"><a href="#cb32-128" aria-hidden="true" tabindex="-1"></a>  <span class="st">"035"</span> <span class="ot">=</span> <span class="st">"6:22 a.m."</span>,</span>
+<span id="cb32-129"><a href="#cb32-129" aria-hidden="true" tabindex="-1"></a>  <span class="st">"046"</span> <span class="ot">=</span> <span class="st">"7:17 a.m."</span>,</span>
+<span id="cb32-130"><a href="#cb32-130" aria-hidden="true" tabindex="-1"></a>  <span class="st">"065"</span> <span class="ot">=</span> <span class="st">"8:52 a.m."</span>,</span>
+<span id="cb32-131"><a href="#cb32-131" aria-hidden="true" tabindex="-1"></a>  <span class="st">"068"</span> <span class="ot">=</span> <span class="st">"9:07 a.m."</span>,</span>
+<span id="cb32-132"><a href="#cb32-132" aria-hidden="true" tabindex="-1"></a>  <span class="st">"076"</span> <span class="ot">=</span> <span class="st">"9:47 a.m."</span>,</span>
+<span id="cb32-133"><a href="#cb32-133" aria-hidden="true" tabindex="-1"></a>  <span class="st">"079"</span> <span class="ot">=</span> <span class="st">"10:05 a.m."</span>,</span>
+<span id="cb32-134"><a href="#cb32-134" aria-hidden="true" tabindex="-1"></a>  <span class="st">"083"</span> <span class="ot">=</span> <span class="st">"10:45 a.m."</span>,</span>
+<span id="cb32-135"><a href="#cb32-135" aria-hidden="true" tabindex="-1"></a>  <span class="st">"085"</span> <span class="ot">=</span> <span class="st">"11:05 a.m."</span>,</span>
+<span id="cb32-136"><a href="#cb32-136" aria-hidden="true" tabindex="-1"></a>  <span class="st">"086"</span> <span class="ot">=</span> <span class="st">"11:15 a.m."</span>,</span>
+<span id="cb32-137"><a href="#cb32-137" aria-hidden="true" tabindex="-1"></a>  <span class="st">"103"</span> <span class="ot">=</span> <span class="st">"2:05 p.m."</span>,</span>
+<span id="cb32-138"><a href="#cb32-138" aria-hidden="true" tabindex="-1"></a>  <span class="st">"105"</span> <span class="ot">=</span> <span class="st">"2:25 p.m."</span>,</span>
+<span id="cb32-139"><a href="#cb32-139" aria-hidden="true" tabindex="-1"></a>  <span class="st">"118"</span> <span class="ot">=</span> <span class="st">"4:35 p.m."</span>,</span>
+<span id="cb32-140"><a href="#cb32-140" aria-hidden="true" tabindex="-1"></a>  <span class="st">"127"</span> <span class="ot">=</span> <span class="st">"6:05 p.m."</span>,</span>
+<span id="cb32-141"><a href="#cb32-141" aria-hidden="true" tabindex="-1"></a>  <span class="st">"130"</span> <span class="ot">=</span> <span class="st">"6:35 p.m."</span>,</span>
+<span id="cb32-142"><a href="#cb32-142" aria-hidden="true" tabindex="-1"></a>  <span class="st">"131"</span> <span class="ot">=</span> <span class="st">"6:45 p.m."</span>,</span>
+<span id="cb32-143"><a href="#cb32-143" aria-hidden="true" tabindex="-1"></a>  <span class="st">"139"</span> <span class="ot">=</span> <span class="st">"9:25 p.m."</span>,</span>
+<span id="cb32-144"><a href="#cb32-144" aria-hidden="true" tabindex="-1"></a>  <span class="st">"141"</span> <span class="ot">=</span> <span class="st">"9:45 p.m."</span>,</span>
+<span id="cb32-145"><a href="#cb32-145" aria-hidden="true" tabindex="-1"></a>  <span class="st">"149"</span> <span class="ot">=</span> <span class="st">"11:05 p.m."</span>,</span>
+<span id="cb32-146"><a href="#cb32-146" aria-hidden="true" tabindex="-1"></a>  <span class="st">"057"</span> <span class="ot">=</span> <span class="st">"8:12 a.m."</span>,</span>
+<span id="cb32-147"><a href="#cb32-147" aria-hidden="true" tabindex="-1"></a>  <span class="st">"059"</span> <span class="ot">=</span> <span class="st">"8:22 a.m."</span>,</span>
+<span id="cb32-148"><a href="#cb32-148" aria-hidden="true" tabindex="-1"></a>  <span class="st">"063"</span> <span class="ot">=</span> <span class="st">"8:42 a.m."</span>,</span>
+<span id="cb32-149"><a href="#cb32-149" aria-hidden="true" tabindex="-1"></a>  <span class="st">"066"</span> <span class="ot">=</span> <span class="st">"8:57 a.m."</span>,</span>
+<span id="cb32-150"><a href="#cb32-150" aria-hidden="true" tabindex="-1"></a>  <span class="st">"073"</span> <span class="ot">=</span> <span class="st">"9:32 a.m."</span>,</span>
+<span id="cb32-151"><a href="#cb32-151" aria-hidden="true" tabindex="-1"></a>  <span class="st">"078"</span> <span class="ot">=</span> <span class="st">"9:57 a.m."</span>,</span>
+<span id="cb32-152"><a href="#cb32-152" aria-hidden="true" tabindex="-1"></a>  <span class="st">"100"</span> <span class="ot">=</span> <span class="st">"1:35 p.m."</span>,</span>
+<span id="cb32-153"><a href="#cb32-153" aria-hidden="true" tabindex="-1"></a>  <span class="st">"101"</span> <span class="ot">=</span> <span class="st">"1:45 p.m."</span>,</span>
+<span id="cb32-154"><a href="#cb32-154" aria-hidden="true" tabindex="-1"></a>  <span class="st">"104"</span> <span class="ot">=</span> <span class="st">"2:15 p.m."</span>,</span>
+<span id="cb32-155"><a href="#cb32-155" aria-hidden="true" tabindex="-1"></a>  <span class="st">"107"</span> <span class="ot">=</span> <span class="st">"2:45 p.m."</span>,</span>
+<span id="cb32-156"><a href="#cb32-156" aria-hidden="true" tabindex="-1"></a>  <span class="st">"111"</span> <span class="ot">=</span> <span class="st">"3:25 p.m."</span>,</span>
+<span id="cb32-157"><a href="#cb32-157" aria-hidden="true" tabindex="-1"></a>  <span class="st">"116"</span> <span class="ot">=</span> <span class="st">"4:15 p.m."</span>,</span>
+<span id="cb32-158"><a href="#cb32-158" aria-hidden="true" tabindex="-1"></a>  <span class="st">"128"</span> <span class="ot">=</span> <span class="st">"6:15 p.m."</span>,</span>
+<span id="cb32-159"><a href="#cb32-159" aria-hidden="true" tabindex="-1"></a>  <span class="st">"150"</span> <span class="ot">=</span> <span class="st">"11:35 p.m."</span>,</span>
+<span id="cb32-160"><a href="#cb32-160" aria-hidden="true" tabindex="-1"></a>  <span class="st">"0"</span> <span class="ot">=</span> <span class="st">"N/A (not a worker; worker who worked from home)"</span>,</span>
+<span id="cb32-161"><a href="#cb32-161" aria-hidden="true" tabindex="-1"></a>  <span class="st">"010"</span> <span class="ot">=</span> <span class="st">"3:35 a.m."</span>,</span>
+<span id="cb32-162"><a href="#cb32-162" aria-hidden="true" tabindex="-1"></a>  <span class="st">"011"</span> <span class="ot">=</span> <span class="st">"3:45 a.m."</span>,</span>
+<span id="cb32-163"><a href="#cb32-163" aria-hidden="true" tabindex="-1"></a>  <span class="st">"019"</span> <span class="ot">=</span> <span class="st">"5:02 a.m."</span>,</span>
+<span id="cb32-164"><a href="#cb32-164" aria-hidden="true" tabindex="-1"></a>  <span class="st">"028"</span> <span class="ot">=</span> <span class="st">"5:47 a.m."</span>,</span>
+<span id="cb32-165"><a href="#cb32-165" aria-hidden="true" tabindex="-1"></a>  <span class="st">"044"</span> <span class="ot">=</span> <span class="st">"7:07 a.m."</span>,</span>
+<span id="cb32-166"><a href="#cb32-166" aria-hidden="true" tabindex="-1"></a>  <span class="st">"045"</span> <span class="ot">=</span> <span class="st">"7:12 a.m."</span>,</span>
+<span id="cb32-167"><a href="#cb32-167" aria-hidden="true" tabindex="-1"></a>  <span class="st">"047"</span> <span class="ot">=</span> <span class="st">"7:22 a.m."</span>,</span>
+<span id="cb32-168"><a href="#cb32-168" aria-hidden="true" tabindex="-1"></a>  <span class="st">"049"</span> <span class="ot">=</span> <span class="st">"7:32 a.m."</span>,</span>
+<span id="cb32-169"><a href="#cb32-169" aria-hidden="true" tabindex="-1"></a>  <span class="st">"053"</span> <span class="ot">=</span> <span class="st">"7:52 a.m."</span>,</span>
+<span id="cb32-170"><a href="#cb32-170" aria-hidden="true" tabindex="-1"></a>  <span class="st">"055"</span> <span class="ot">=</span> <span class="st">"8:02 a.m."</span>,</span>
+<span id="cb32-171"><a href="#cb32-171" aria-hidden="true" tabindex="-1"></a>  <span class="st">"056"</span> <span class="ot">=</span> <span class="st">"8:07 a.m."</span>,</span>
+<span id="cb32-172"><a href="#cb32-172" aria-hidden="true" tabindex="-1"></a>  <span class="st">"084"</span> <span class="ot">=</span> <span class="st">"10:55 a.m."</span>,</span>
+<span id="cb32-173"><a href="#cb32-173" aria-hidden="true" tabindex="-1"></a>  <span class="st">"090"</span> <span class="ot">=</span> <span class="st">"11:55 a.m."</span>,</span>
+<span id="cb32-174"><a href="#cb32-174" aria-hidden="true" tabindex="-1"></a>  <span class="st">"092"</span> <span class="ot">=</span> <span class="st">"12:15 p.m."</span>,</span>
+<span id="cb32-175"><a href="#cb32-175" aria-hidden="true" tabindex="-1"></a>  <span class="st">"110"</span> <span class="ot">=</span> <span class="st">"3:15 p.m. "</span>,</span>
+<span id="cb32-176"><a href="#cb32-176" aria-hidden="true" tabindex="-1"></a>  <span class="st">"112"</span> <span class="ot">=</span> <span class="st">"3:35 p.m."</span>,</span>
+<span id="cb32-177"><a href="#cb32-177" aria-hidden="true" tabindex="-1"></a>  <span class="st">"120"</span> <span class="ot">=</span> <span class="st">"4:55 p.m."</span>,</span>
+<span id="cb32-178"><a href="#cb32-178" aria-hidden="true" tabindex="-1"></a>  <span class="st">"132"</span> <span class="ot">=</span> <span class="st">"6:55 p.m."</span>,</span>
+<span id="cb32-179"><a href="#cb32-179" aria-hidden="true" tabindex="-1"></a>  <span class="st">"133"</span> <span class="ot">=</span> <span class="st">"7:10 p.m."</span>,</span>
+<span id="cb32-180"><a href="#cb32-180" aria-hidden="true" tabindex="-1"></a>  <span class="st">"134"</span> <span class="ot">=</span> <span class="st">"7:40 p.m."</span>,</span>
+<span id="cb32-181"><a href="#cb32-181" aria-hidden="true" tabindex="-1"></a>  <span class="st">"009"</span> <span class="ot">=</span> <span class="st">"3:25 a.m."</span>,</span>
+<span id="cb32-182"><a href="#cb32-182" aria-hidden="true" tabindex="-1"></a>  <span class="st">"023"</span> <span class="ot">=</span> <span class="st">"5:22 a.m."</span>,</span>
+<span id="cb32-183"><a href="#cb32-183" aria-hidden="true" tabindex="-1"></a>  <span class="st">"031"</span> <span class="ot">=</span> <span class="st">"6:02 a.m."</span>,</span>
+<span id="cb32-184"><a href="#cb32-184" aria-hidden="true" tabindex="-1"></a>  <span class="st">"038"</span> <span class="ot">=</span> <span class="st">"6:37 a.m."</span>,</span>
+<span id="cb32-185"><a href="#cb32-185" aria-hidden="true" tabindex="-1"></a>  <span class="st">"040"</span> <span class="ot">=</span> <span class="st">"6:47 a.m."</span>,</span>
+<span id="cb32-186"><a href="#cb32-186" aria-hidden="true" tabindex="-1"></a>  <span class="st">"050"</span> <span class="ot">=</span> <span class="st">"7:37 a.m."</span>,</span>
+<span id="cb32-187"><a href="#cb32-187" aria-hidden="true" tabindex="-1"></a>  <span class="st">"060"</span> <span class="ot">=</span> <span class="st">"8:27 a.m."</span>,</span>
+<span id="cb32-188"><a href="#cb32-188" aria-hidden="true" tabindex="-1"></a>  <span class="st">"062"</span> <span class="ot">=</span> <span class="st">"8:37 a.m."</span>,</span>
+<span id="cb32-189"><a href="#cb32-189" aria-hidden="true" tabindex="-1"></a>  <span class="st">"064"</span> <span class="ot">=</span> <span class="st">"8:47 a.m."</span>,</span>
+<span id="cb32-190"><a href="#cb32-190" aria-hidden="true" tabindex="-1"></a>  <span class="st">"067"</span> <span class="ot">=</span> <span class="st">"9:02 a.m."</span>,</span>
+<span id="cb32-191"><a href="#cb32-191" aria-hidden="true" tabindex="-1"></a>  <span class="st">"069"</span> <span class="ot">=</span> <span class="st">"9:12 a.m."</span>,</span>
+<span id="cb32-192"><a href="#cb32-192" aria-hidden="true" tabindex="-1"></a>  <span class="st">"082"</span> <span class="ot">=</span> <span class="st">"10:35 a.m."</span>,</span>
+<span id="cb32-193"><a href="#cb32-193" aria-hidden="true" tabindex="-1"></a>  <span class="st">"095"</span> <span class="ot">=</span> <span class="st">"12:45 p.m."</span>,</span>
+<span id="cb32-194"><a href="#cb32-194" aria-hidden="true" tabindex="-1"></a>  <span class="st">"096"</span> <span class="ot">=</span> <span class="st">"12:55 p.m."</span>,</span>
+<span id="cb32-195"><a href="#cb32-195" aria-hidden="true" tabindex="-1"></a>  <span class="st">"097"</span> <span class="ot">=</span> <span class="st">"1:05 p.m."</span>,</span>
+<span id="cb32-196"><a href="#cb32-196" aria-hidden="true" tabindex="-1"></a>  <span class="st">"119"</span> <span class="ot">=</span> <span class="st">"4:45 p.m."</span>,</span>
+<span id="cb32-197"><a href="#cb32-197" aria-hidden="true" tabindex="-1"></a>  <span class="st">"121"</span> <span class="ot">=</span> <span class="st">"5:05 p.m."</span>,</span>
+<span id="cb32-198"><a href="#cb32-198" aria-hidden="true" tabindex="-1"></a>  <span class="st">"135"</span> <span class="ot">=</span> <span class="st">"8:10 p.m."</span>,</span>
+<span id="cb32-199"><a href="#cb32-199" aria-hidden="true" tabindex="-1"></a>  <span class="st">"003"</span> <span class="ot">=</span> <span class="st">"1:10 a.m."</span>,</span>
+<span id="cb32-200"><a href="#cb32-200" aria-hidden="true" tabindex="-1"></a>  <span class="st">"033"</span> <span class="ot">=</span> <span class="st">"6:12 a.m."</span>,</span>
+<span id="cb32-201"><a href="#cb32-201" aria-hidden="true" tabindex="-1"></a>  <span class="st">"036"</span> <span class="ot">=</span> <span class="st">"6:27 a.m."</span>,</span>
+<span id="cb32-202"><a href="#cb32-202" aria-hidden="true" tabindex="-1"></a>  <span class="st">"041"</span> <span class="ot">=</span> <span class="st">"6:52 a.m."</span>,</span>
+<span id="cb32-203"><a href="#cb32-203" aria-hidden="true" tabindex="-1"></a>  <span class="st">"061"</span> <span class="ot">=</span> <span class="st">"8:32 a.m."</span>,</span>
+<span id="cb32-204"><a href="#cb32-204" aria-hidden="true" tabindex="-1"></a>  <span class="st">"081"</span> <span class="ot">=</span> <span class="st">"10:25 a.m."</span>,</span>
+<span id="cb32-205"><a href="#cb32-205" aria-hidden="true" tabindex="-1"></a>  <span class="st">"093"</span> <span class="ot">=</span> <span class="st">"12:25 p.m."</span>,</span>
+<span id="cb32-206"><a href="#cb32-206" aria-hidden="true" tabindex="-1"></a>  <span class="st">"098"</span> <span class="ot">=</span> <span class="st">"1:15 p.m."</span>,</span>
+<span id="cb32-207"><a href="#cb32-207" aria-hidden="true" tabindex="-1"></a>  <span class="st">"102"</span> <span class="ot">=</span> <span class="st">"1:55 p.m."</span>,</span>
+<span id="cb32-208"><a href="#cb32-208" aria-hidden="true" tabindex="-1"></a>  <span class="st">"109"</span> <span class="ot">=</span> <span class="st">"3:05 p.m."</span>,</span>
+<span id="cb32-209"><a href="#cb32-209" aria-hidden="true" tabindex="-1"></a>  <span class="st">"115"</span> <span class="ot">=</span> <span class="st">"4:05 p.m."</span>,</span>
+<span id="cb32-210"><a href="#cb32-210" aria-hidden="true" tabindex="-1"></a>  <span class="st">"126"</span> <span class="ot">=</span> <span class="st">"5:55 p.m."</span>,</span>
+<span id="cb32-211"><a href="#cb32-211" aria-hidden="true" tabindex="-1"></a>  <span class="st">"143"</span> <span class="ot">=</span> <span class="st">"10:05 p.m."</span>,</span>
+<span id="cb32-212"><a href="#cb32-212" aria-hidden="true" tabindex="-1"></a>  <span class="st">"145"</span> <span class="ot">=</span> <span class="st">"10:25 p.m."</span>,</span>
+<span id="cb32-213"><a href="#cb32-213" aria-hidden="true" tabindex="-1"></a>  <span class="st">"001"</span> <span class="ot">=</span> <span class="st">"12:10 a.m."</span>,</span>
+<span id="cb32-214"><a href="#cb32-214" aria-hidden="true" tabindex="-1"></a>  <span class="st">"006"</span> <span class="ot">=</span> <span class="st">"2:40 a.m."</span>,</span>
+<span id="cb32-215"><a href="#cb32-215" aria-hidden="true" tabindex="-1"></a>  <span class="st">"012"</span> <span class="ot">=</span> <span class="st">"3:55 a.m."</span>,</span>
+<span id="cb32-216"><a href="#cb32-216" aria-hidden="true" tabindex="-1"></a>  <span class="st">"013"</span> <span class="ot">=</span> <span class="st">"4:05 a.m."</span>,</span>
+<span id="cb32-217"><a href="#cb32-217" aria-hidden="true" tabindex="-1"></a>  <span class="st">"016"</span> <span class="ot">=</span> <span class="st">"4:35 a.m."</span>,</span>
+<span id="cb32-218"><a href="#cb32-218" aria-hidden="true" tabindex="-1"></a>  <span class="st">"025"</span> <span class="ot">=</span> <span class="st">"5:32 a.m."</span>,</span>
+<span id="cb32-219"><a href="#cb32-219" aria-hidden="true" tabindex="-1"></a>  <span class="st">"026"</span> <span class="ot">=</span> <span class="st">"5:37 a.m."</span>,</span>
+<span id="cb32-220"><a href="#cb32-220" aria-hidden="true" tabindex="-1"></a>  <span class="st">"030"</span> <span class="ot">=</span> <span class="st">"5:57 a.m."</span>,</span>
+<span id="cb32-221"><a href="#cb32-221" aria-hidden="true" tabindex="-1"></a>  <span class="st">"077"</span> <span class="ot">=</span> <span class="st">"9:52 a.m."</span>,</span>
+<span id="cb32-222"><a href="#cb32-222" aria-hidden="true" tabindex="-1"></a>  <span class="st">"087"</span> <span class="ot">=</span> <span class="st">"11:25 a.m."</span>,</span>
+<span id="cb32-223"><a href="#cb32-223" aria-hidden="true" tabindex="-1"></a>  <span class="st">"088"</span> <span class="ot">=</span> <span class="st">"11:35 a.m."</span>,</span>
+<span id="cb32-224"><a href="#cb32-224" aria-hidden="true" tabindex="-1"></a>  <span class="st">"094"</span> <span class="ot">=</span> <span class="st">"12:35 p.m."</span>,</span>
+<span id="cb32-225"><a href="#cb32-225" aria-hidden="true" tabindex="-1"></a>  <span class="st">"106"</span> <span class="ot">=</span> <span class="st">"2:35 p.m."</span>,</span>
+<span id="cb32-226"><a href="#cb32-226" aria-hidden="true" tabindex="-1"></a>  <span class="st">"108"</span> <span class="ot">=</span> <span class="st">"2:55 p.m."</span>,</span>
+<span id="cb32-227"><a href="#cb32-227" aria-hidden="true" tabindex="-1"></a>  <span class="st">"122"</span> <span class="ot">=</span> <span class="st">"5:15 p.m."</span>,</span>
+<span id="cb32-228"><a href="#cb32-228" aria-hidden="true" tabindex="-1"></a>  <span class="st">"123"</span> <span class="ot">=</span> <span class="st">"5:25 p.m."</span>,</span>
+<span id="cb32-229"><a href="#cb32-229" aria-hidden="true" tabindex="-1"></a>  <span class="st">"124"</span> <span class="ot">=</span> <span class="st">"5:35 p.m."</span>,</span>
+<span id="cb32-230"><a href="#cb32-230" aria-hidden="true" tabindex="-1"></a>  <span class="st">"144"</span> <span class="ot">=</span> <span class="st">"10:15 p.m."</span>,</span>
+<span id="cb32-231"><a href="#cb32-231" aria-hidden="true" tabindex="-1"></a>  <span class="st">"002"</span> <span class="ot">=</span> <span class="st">"12:40 a.m."</span>,</span>
+<span id="cb32-232"><a href="#cb32-232" aria-hidden="true" tabindex="-1"></a>  <span class="st">"004"</span> <span class="ot">=</span> <span class="st">"1:40 a.m."</span>,</span>
+<span id="cb32-233"><a href="#cb32-233" aria-hidden="true" tabindex="-1"></a>  <span class="st">"005"</span> <span class="ot">=</span> <span class="st">"2:10 a.m."</span>,</span>
+<span id="cb32-234"><a href="#cb32-234" aria-hidden="true" tabindex="-1"></a>  <span class="st">"007"</span> <span class="ot">=</span> <span class="st">"3:05 a.m."</span>,</span>
+<span id="cb32-235"><a href="#cb32-235" aria-hidden="true" tabindex="-1"></a>  <span class="st">"020"</span> <span class="ot">=</span> <span class="st">"5:07 a.m."</span>,</span>
+<span id="cb32-236"><a href="#cb32-236" aria-hidden="true" tabindex="-1"></a>  <span class="st">"021"</span> <span class="ot">=</span> <span class="st">"5:12 a.m."</span>,</span>
+<span id="cb32-237"><a href="#cb32-237" aria-hidden="true" tabindex="-1"></a>  <span class="st">"024"</span> <span class="ot">=</span> <span class="st">"5:27 a.m."</span>,</span>
+<span id="cb32-238"><a href="#cb32-238" aria-hidden="true" tabindex="-1"></a>  <span class="st">"027"</span> <span class="ot">=</span> <span class="st">"5:42 a.m."</span>,</span>
+<span id="cb32-239"><a href="#cb32-239" aria-hidden="true" tabindex="-1"></a>  <span class="st">"034"</span> <span class="ot">=</span> <span class="st">"6:17 a.m."</span>,</span>
+<span id="cb32-240"><a href="#cb32-240" aria-hidden="true" tabindex="-1"></a>  <span class="st">"039"</span> <span class="ot">=</span> <span class="st">"6:42 a.m."</span>,</span>
+<span id="cb32-241"><a href="#cb32-241" aria-hidden="true" tabindex="-1"></a>  <span class="st">"042"</span> <span class="ot">=</span> <span class="st">"6:57 a.m."</span>,</span>
+<span id="cb32-242"><a href="#cb32-242" aria-hidden="true" tabindex="-1"></a>  <span class="st">"043"</span> <span class="ot">=</span> <span class="st">"7:02 a.m."</span>,</span>
+<span id="cb32-243"><a href="#cb32-243" aria-hidden="true" tabindex="-1"></a>  <span class="st">"048"</span> <span class="ot">=</span> <span class="st">"7:27 a.m."</span>,</span>
+<span id="cb32-244"><a href="#cb32-244" aria-hidden="true" tabindex="-1"></a>  <span class="st">"051"</span> <span class="ot">=</span> <span class="st">"7:42 a.m."</span>,</span>
+<span id="cb32-245"><a href="#cb32-245" aria-hidden="true" tabindex="-1"></a>  <span class="st">"058"</span> <span class="ot">=</span> <span class="st">"8:17 a.m."</span>,</span>
+<span id="cb32-246"><a href="#cb32-246" aria-hidden="true" tabindex="-1"></a>  <span class="st">"072"</span> <span class="ot">=</span> <span class="st">"9:27 a.m."</span>,</span>
+<span id="cb32-247"><a href="#cb32-247" aria-hidden="true" tabindex="-1"></a>  <span class="st">"074"</span> <span class="ot">=</span> <span class="st">"9:37 a.m."</span>,</span>
+<span id="cb32-248"><a href="#cb32-248" aria-hidden="true" tabindex="-1"></a>  <span class="st">"075"</span> <span class="ot">=</span> <span class="st">"9:42 a.m."</span>,</span>
+<span id="cb32-249"><a href="#cb32-249" aria-hidden="true" tabindex="-1"></a>  <span class="st">"091"</span> <span class="ot">=</span> <span class="st">"12:05 p.m."</span>,</span>
+<span id="cb32-250"><a href="#cb32-250" aria-hidden="true" tabindex="-1"></a>  <span class="st">"113"</span> <span class="ot">=</span> <span class="st">"3:45 p.m."</span>,</span>
+<span id="cb32-251"><a href="#cb32-251" aria-hidden="true" tabindex="-1"></a>  <span class="st">"117"</span> <span class="ot">=</span> <span class="st">"4:25 p.m."</span>,</span>
+<span id="cb32-252"><a href="#cb32-252" aria-hidden="true" tabindex="-1"></a>  <span class="st">"125"</span> <span class="ot">=</span> <span class="st">"5:45 p.m."</span>,</span>
+<span id="cb32-253"><a href="#cb32-253" aria-hidden="true" tabindex="-1"></a>  <span class="st">"129"</span> <span class="ot">=</span> <span class="st">"6:25 p.m."</span>,</span>
+<span id="cb32-254"><a href="#cb32-254" aria-hidden="true" tabindex="-1"></a>  <span class="st">"136"</span> <span class="ot">=</span> <span class="st">"8:40 p.m."</span>,</span>
+<span id="cb32-255"><a href="#cb32-255" aria-hidden="true" tabindex="-1"></a>  <span class="st">"137"</span> <span class="ot">=</span> <span class="st">"9:05 p.m."</span>,</span>
+<span id="cb32-256"><a href="#cb32-256" aria-hidden="true" tabindex="-1"></a>  <span class="st">"140"</span> <span class="ot">=</span> <span class="st">"9:35 p.m."</span>,</span>
+<span id="cb32-257"><a href="#cb32-257" aria-hidden="true" tabindex="-1"></a>  <span class="st">"008"</span> <span class="ot">=</span> <span class="st">"3:15 a.m."</span>,</span>
+<span id="cb32-258"><a href="#cb32-258" aria-hidden="true" tabindex="-1"></a>  <span class="st">"018"</span> <span class="ot">=</span> <span class="st">"4:55 a.m."</span>,</span>
+<span id="cb32-259"><a href="#cb32-259" aria-hidden="true" tabindex="-1"></a>  <span class="st">"029"</span> <span class="ot">=</span> <span class="st">"5:52 a.m."</span>,</span>
+<span id="cb32-260"><a href="#cb32-260" aria-hidden="true" tabindex="-1"></a>  <span class="st">"032"</span> <span class="ot">=</span> <span class="st">"6:07 a.m."</span>,</span>
+<span id="cb32-261"><a href="#cb32-261" aria-hidden="true" tabindex="-1"></a>  <span class="st">"037"</span> <span class="ot">=</span> <span class="st">"6:32 a.m."</span>,</span>
+<span id="cb32-262"><a href="#cb32-262" aria-hidden="true" tabindex="-1"></a>  <span class="st">"052"</span> <span class="ot">=</span> <span class="st">"7:47 a.m."</span>,</span>
+<span id="cb32-263"><a href="#cb32-263" aria-hidden="true" tabindex="-1"></a>  <span class="st">"054"</span> <span class="ot">=</span> <span class="st">"7:57 a.m."</span>,</span>
+<span id="cb32-264"><a href="#cb32-264" aria-hidden="true" tabindex="-1"></a>  <span class="st">"070"</span> <span class="ot">=</span> <span class="st">"9:17 a.m."</span>,</span>
+<span id="cb32-265"><a href="#cb32-265" aria-hidden="true" tabindex="-1"></a>  <span class="st">"071"</span> <span class="ot">=</span> <span class="st">"9:22 a.m."</span>,</span>
+<span id="cb32-266"><a href="#cb32-266" aria-hidden="true" tabindex="-1"></a>  <span class="st">"080"</span> <span class="ot">=</span> <span class="st">"10:15 a.m."</span>,</span>
+<span id="cb32-267"><a href="#cb32-267" aria-hidden="true" tabindex="-1"></a>  <span class="st">"089"</span> <span class="ot">=</span> <span class="st">"11:45 a.m."</span>,</span>
+<span id="cb32-268"><a href="#cb32-268" aria-hidden="true" tabindex="-1"></a>  <span class="st">"099"</span> <span class="ot">=</span> <span class="st">"1:25 p.m."</span>,</span>
+<span id="cb32-269"><a href="#cb32-269" aria-hidden="true" tabindex="-1"></a>  <span class="st">"114"</span> <span class="ot">=</span> <span class="st">"3:55 p.m."</span>,</span>
+<span id="cb32-270"><a href="#cb32-270" aria-hidden="true" tabindex="-1"></a>  <span class="st">"138"</span> <span class="ot">=</span> <span class="st">"9:15 p.m."</span>,</span>
+<span id="cb32-271"><a href="#cb32-271" aria-hidden="true" tabindex="-1"></a>  <span class="st">"142"</span> <span class="ot">=</span> <span class="st">"9:55 p.m."</span>,</span>
+<span id="cb32-272"><a href="#cb32-272" aria-hidden="true" tabindex="-1"></a>  <span class="st">"146"</span> <span class="ot">=</span> <span class="st">"10:35 p.m."</span>,</span>
+<span id="cb32-273"><a href="#cb32-273" aria-hidden="true" tabindex="-1"></a>  <span class="st">"147"</span> <span class="ot">=</span> <span class="st">"10:45 p.m."</span>,</span>
+<span id="cb32-274"><a href="#cb32-274" aria-hidden="true" tabindex="-1"></a>  <span class="st">"148"</span> <span class="ot">=</span> <span class="st">"10:55 p.m."</span></span>
+<span id="cb32-275"><a href="#cb32-275" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-276"><a href="#cb32-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-277"><a href="#cb32-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-278"><a href="#cb32-278" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(time_lst)){</span>
+<span id="cb32-279"><a href="#cb32-279" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">&lt;-</span> stringr<span class="sc">::</span><span class="fu">str_split</span>(time_lst[[i]], <span class="st">' '</span>)</span>
+<span id="cb32-280"><a href="#cb32-280" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(v[[<span class="dv">1</span>]][<span class="dv">2</span>] <span class="sc">==</span> <span class="st">'a.m'</span>,</span>
+<span id="cb32-281"><a href="#cb32-281" aria-hidden="true" tabindex="-1"></a>         time_lst[[i]] <span class="ot">&lt;-</span> <span class="fu">hm</span>(v[[<span class="dv">1</span>]][<span class="dv">1</span>], <span class="at">quiet =</span> T),</span>
+<span id="cb32-282"><a href="#cb32-282" aria-hidden="true" tabindex="-1"></a>         time_lst[[i]] <span class="ot">&lt;-</span> <span class="fu">hm</span>(v[[<span class="dv">1</span>]][<span class="dv">1</span>], <span class="at">quiet =</span> T) <span class="sc">+</span> <span class="fu">hours</span>(<span class="dv">12</span>))</span>
+<span id="cb32-283"><a href="#cb32-283" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-284"><a href="#cb32-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-285"><a href="#cb32-285" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(time_lst)){</span>
+<span id="cb32-286"><a href="#cb32-286" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">attributes</span>(time_lst[[i]])<span class="sc">$</span>hour <span class="sc">%in%</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="dv">24</span>)){</span>
+<span id="cb32-287"><a href="#cb32-287" aria-hidden="true" tabindex="-1"></a>    time_lst[[i]] <span class="ot">&lt;-</span> time_lst[[i]] <span class="sc">-</span> <span class="fu">hours</span>(<span class="dv">24</span>)</span>
+<span id="cb32-288"><a href="#cb32-288" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-289"><a href="#cb32-289" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-290"><a href="#cb32-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-291"><a href="#cb32-291" aria-hidden="true" tabindex="-1"></a>JWDP_lookup <span class="ot">&lt;-</span> time_lst</span>
+<span id="cb32-292"><a href="#cb32-292" aria-hidden="true" tabindex="-1"></a>lookup_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb32-293"><a href="#cb32-293" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(JWDP_lookup[[x]])</span>
+<span id="cb32-294"><a href="#cb32-294" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-295"><a href="#cb32-295" aria-hidden="true" tabindex="-1"></a>JWDP_lookup <span class="ot">&lt;-</span> <span class="fu">map_vec</span>(<span class="fu">names</span>(JWDP_lookup), lookup_fn)</span>
+<span id="cb32-296"><a href="#cb32-296" aria-hidden="true" tabindex="-1"></a>JWDP_lookup <span class="ot">&lt;-</span> <span class="fu">sort</span>(JWDP_lookup, <span class="at">na.last =</span> F)</span>
+<span id="cb32-297"><a href="#cb32-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-298"><a href="#cb32-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-299"><a href="#cb32-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-300"><a href="#cb32-300" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-301"><a href="#cb32-301" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Now we build up the URL one input variable at a time</span></span>
+<span id="cb32-302"><a href="#cb32-302" aria-hidden="true" tabindex="-1"></a>  <span class="co">#at each step we use ifelse() to check that the input variables belong to the allowable set of variables</span></span>
+<span id="cb32-303"><a href="#cb32-303" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-304"><a href="#cb32-304" aria-hidden="true" tabindex="-1"></a>  URL_1 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb32-305"><a href="#cb32-305" aria-hidden="true" tabindex="-1"></a>    year <span class="sc">&lt;=</span> <span class="dv">2022</span> <span class="sc">&amp;</span> year <span class="sc">&gt;=</span> <span class="dv">2010</span> <span class="sc">&amp;</span> <span class="fu">as.integer</span>(year) <span class="sc">-</span> year <span class="sc">==</span> <span class="dv">0</span>, </span>
+<span id="cb32-306"><a href="#cb32-306" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste0</span>(<span class="st">'https://api.census.gov/data/'</span>, year, <span class="st">'/acs/acs1/pums?get=PWGTP'</span>), </span>
+<span id="cb32-307"><a href="#cb32-307" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">'You must provide a year from 2010 to 2022'</span>)</span>
+<span id="cb32-308"><a href="#cb32-308" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb32-309"><a href="#cb32-309" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-310"><a href="#cb32-310" aria-hidden="true" tabindex="-1"></a>  URL_2 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb32-311"><a href="#cb32-311" aria-hidden="true" tabindex="-1"></a>    <span class="cn">FALSE</span> <span class="sc">%in%</span> (num_var <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'AGEP'</span>, <span class="st">'GASP'</span>, <span class="st">'GRPIP'</span>, <span class="st">'JWAP'</span>, <span class="st">'JWDP'</span>, <span class="st">'JWMNP'</span>)),</span>
+<span id="cb32-312"><a href="#cb32-312" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">'You must choose numeric variables from AGEP, GASP, GRPIP, JWAP, JWDP, or JWMNP and pass them to the num_var argument as a character vector of the desired variables.'</span>),</span>
+<span id="cb32-313"><a href="#cb32-313" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(num_var, <span class="at">collapse =</span> <span class="st">','</span>)</span>
+<span id="cb32-314"><a href="#cb32-314" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb32-315"><a href="#cb32-315" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-316"><a href="#cb32-316" aria-hidden="true" tabindex="-1"></a>  URL_3 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb32-317"><a href="#cb32-317" aria-hidden="true" tabindex="-1"></a>    <span class="cn">FALSE</span> <span class="sc">%in%</span> (cat_var <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'FER'</span>, <span class="st">'HHL'</span>, <span class="st">'HISPEED'</span>, <span class="st">'JWTRNS'</span>, <span class="st">'SCH'</span>, <span class="st">'SCHL'</span>, <span class="st">'SEX'</span>)),</span>
+<span id="cb32-318"><a href="#cb32-318" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">'You must choose categorical variables from FER, HHL, HISPEED, JWTRNS, SCH, SCHL, or SEX and pass them to the cat_var argument as a character vector of the desired variables.'</span>),</span>
+<span id="cb32-319"><a href="#cb32-319" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(cat_var, <span class="at">collapse =</span> <span class="st">','</span>)</span>
+<span id="cb32-320"><a href="#cb32-320" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb32-321"><a href="#cb32-321" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-322"><a href="#cb32-322" aria-hidden="true" tabindex="-1"></a>  URL_4 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(geography <span class="sc">%in%</span> <span class="fu">names</span>(state_lookup), </span>
+<span id="cb32-323"><a href="#cb32-323" aria-hidden="true" tabindex="-1"></a>       <span class="fu">paste0</span>(<span class="st">'&amp;for=state:'</span>, state_lookup[[geography]]),</span>
+<span id="cb32-324"><a href="#cb32-324" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(geography <span class="sc">%in%</span> <span class="fu">names</span>(region_lookup),</span>
+<span id="cb32-325"><a href="#cb32-325" aria-hidden="true" tabindex="-1"></a>              <span class="fu">paste0</span>(<span class="st">'&amp;for=region:'</span>, region_lookup[[geography]]),</span>
+<span id="cb32-326"><a href="#cb32-326" aria-hidden="true" tabindex="-1"></a>              <span class="fu">ifelse</span>(geography <span class="sc">%in%</span> <span class="fu">names</span>(division_lookup),</span>
+<span id="cb32-327"><a href="#cb32-327" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">paste0</span>(<span class="st">'&amp;for=division:'</span>, division_lookup[[geography]]),</span>
+<span id="cb32-328"><a href="#cb32-328" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">ifelse</span>(geography <span class="sc">==</span> <span class="st">'State'</span>,</span>
+<span id="cb32-329"><a href="#cb32-329" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">paste0</span>(<span class="st">'&amp;for=state:'</span>, <span class="st">'*'</span>),</span>
+<span id="cb32-330"><a href="#cb32-330" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">ifelse</span>(geography <span class="sc">==</span> <span class="st">'Region'</span>,</span>
+<span id="cb32-331"><a href="#cb32-331" aria-hidden="true" tabindex="-1"></a>                                   <span class="fu">paste0</span>(<span class="st">'&amp;for=region:'</span>, <span class="st">'*'</span>),</span>
+<span id="cb32-332"><a href="#cb32-332" aria-hidden="true" tabindex="-1"></a>                                   <span class="fu">ifelse</span>(geography <span class="sc">==</span> <span class="st">'Division'</span>,</span>
+<span id="cb32-333"><a href="#cb32-333" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">paste0</span>(<span class="st">'&amp;for=division:'</span>, <span class="st">'*'</span>),</span>
+<span id="cb32-334"><a href="#cb32-334" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">ifelse</span>(geography <span class="sc">==</span> <span class="st">'All'</span>,</span>
+<span id="cb32-335"><a href="#cb32-335" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">''</span>,</span>
+<span id="cb32-336"><a href="#cb32-336" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">stop</span>(<span class="st">'You must choose an appropriate state, region, or division you wish to filter by (must be entered as a string). See https://api.census.gov/data/2022/acs/acs1/pums/variables.html for the allowable list of states, regions, and divisions. Or you should choose geography = </span><span class="sc">\'</span><span class="st">State</span><span class="sc">\'</span><span class="st"> to get all the states, geography = </span><span class="sc">\'</span><span class="st">Region</span><span class="sc">\'</span><span class="st"> to get all the regions, or geography = </span><span class="sc">\'</span><span class="st">Division</span><span class="sc">\'</span><span class="st"> to get all the divisions. To return all values with no geography specified you should choose geography = </span><span class="sc">\'</span><span class="st">All</span><span class="sc">\'</span><span class="st">'</span>)</span>
+<span id="cb32-337"><a href="#cb32-337" aria-hidden="true" tabindex="-1"></a>      )))))))</span>
+<span id="cb32-338"><a href="#cb32-338" aria-hidden="true" tabindex="-1"></a>              </span>
+<span id="cb32-339"><a href="#cb32-339" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-340"><a href="#cb32-340" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-341"><a href="#cb32-341" aria-hidden="true" tabindex="-1"></a>  <span class="co">#We paste together all the individual components of the URL to create a final URL </span></span>
+<span id="cb32-342"><a href="#cb32-342" aria-hidden="true" tabindex="-1"></a>  URL_final <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">paste</span>(URL_1, URL_2, URL_3, <span class="at">sep =</span> <span class="st">','</span>), URL_4)</span>
+<span id="cb32-343"><a href="#cb32-343" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-344"><a href="#cb32-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-345"><a href="#cb32-345" aria-hidden="true" tabindex="-1"></a>  <span class="co">#The previously created helper function is used to return the desired tibble in character form, which is stored in object data_character</span></span>
+<span id="cb32-346"><a href="#cb32-346" aria-hidden="true" tabindex="-1"></a>  return_tbl <span class="ot">&lt;-</span> <span class="fu">helper</span>(URL_final)</span>
+<span id="cb32-347"><a href="#cb32-347" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-348"><a href="#cb32-348" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-349"><a href="#cb32-349" aria-hidden="true" tabindex="-1"></a>  <span class="co">#return_tbl is the desired tibble but all data is in character form. Next we change each column to the appropriate data type</span></span>
+<span id="cb32-350"><a href="#cb32-350" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">names</span>(return_tbl)){</span>
+<span id="cb32-351"><a href="#cb32-351" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (i <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'PWGTP'</span>, <span class="st">'AGEP'</span>, <span class="st">'GASP'</span>, <span class="st">'GRPIP'</span>, <span class="st">'JWMNP'</span>)){</span>
+<span id="cb32-352"><a href="#cb32-352" aria-hidden="true" tabindex="-1"></a>      return_tbl[[i]] <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(return_tbl[[i]])</span>
+<span id="cb32-353"><a href="#cb32-353" aria-hidden="true" tabindex="-1"></a>    } </span>
+<span id="cb32-354"><a href="#cb32-354" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (i <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'FER'</span>, <span class="st">'HHL'</span>, <span class="st">'HISPEED'</span>, <span class="st">'JWTRNS'</span>, <span class="st">'SCH'</span>, <span class="st">'SCHL'</span>, <span class="st">'SEX'</span>)){</span>
+<span id="cb32-355"><a href="#cb32-355" aria-hidden="true" tabindex="-1"></a>      return_tbl[[i]] <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(return_tbl[[i]])</span>
+<span id="cb32-356"><a href="#cb32-356" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb32-357"><a href="#cb32-357" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-358"><a href="#cb32-358" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb32-359"><a href="#cb32-359" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">'JWAP'</span> <span class="sc">%in%</span> <span class="fu">names</span>(return_tbl)){</span>
+<span id="cb32-360"><a href="#cb32-360" aria-hidden="true" tabindex="-1"></a>      return_tbl<span class="sc">$</span>JWAP <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(return_tbl<span class="sc">$</span>JWAP)</span>
+<span id="cb32-361"><a href="#cb32-361" aria-hidden="true" tabindex="-1"></a>      return_tbl <span class="ot">&lt;-</span> <span class="fu">mutate</span>(return_tbl, <span class="at">JWAP =</span> JWAP_lookup[JWAP <span class="sc">+</span> <span class="dv">1</span>])</span>
+<span id="cb32-362"><a href="#cb32-362" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-363"><a href="#cb32-363" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-364"><a href="#cb32-364" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">'JWDP'</span> <span class="sc">%in%</span> <span class="fu">names</span>(return_tbl)){</span>
+<span id="cb32-365"><a href="#cb32-365" aria-hidden="true" tabindex="-1"></a>      return_tbl<span class="sc">$</span>JWDP <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(return_tbl<span class="sc">$</span>JWDP)</span>
+<span id="cb32-366"><a href="#cb32-366" aria-hidden="true" tabindex="-1"></a>      return_tbl <span class="ot">&lt;-</span> <span class="fu">mutate</span>(return_tbl, <span class="at">JWDP =</span> JWDP_lookup[JWDP <span class="sc">+</span> <span class="dv">1</span>])</span>
+<span id="cb32-367"><a href="#cb32-367" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-368"><a href="#cb32-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-369"><a href="#cb32-369" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-370"><a href="#cb32-370" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Change factor names</span></span>
+<span id="cb32-371"><a href="#cb32-371" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">'FER'</span> <span class="sc">%in%</span> <span class="fu">names</span>(return_tbl)){</span>
+<span id="cb32-372"><a href="#cb32-372" aria-hidden="true" tabindex="-1"></a>    return_tbl<span class="sc">$</span>FER <span class="ot">&lt;-</span> <span class="fu">recode</span>(return_tbl<span class="sc">$</span>FER, <span class="st">'0'</span> <span class="ot">=</span> <span class="st">"N/A (less than 15 years/greater than 50 years/ male)"</span>,  <span class="st">'1'</span> <span class="ot">=</span> <span class="st">'Yes'</span>, <span class="st">'2'</span> <span class="ot">=</span> <span class="st">'No'</span>)</span>
+<span id="cb32-373"><a href="#cb32-373" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-374"><a href="#cb32-374" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-375"><a href="#cb32-375" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">'HHL'</span> <span class="sc">%in%</span> <span class="fu">names</span>(return_tbl)){</span>
+<span id="cb32-376"><a href="#cb32-376" aria-hidden="true" tabindex="-1"></a>    return_tbl<span class="sc">$</span>HHL <span class="ot">&lt;-</span> <span class="fu">recode</span>(return_tbl<span class="sc">$</span>HHL, <span class="st">'0'</span> <span class="ot">=</span> <span class="st">"N/A (GQ/vacant)"</span>,  <span class="st">'1'</span> <span class="ot">=</span> <span class="st">'English Only'</span>, <span class="st">'2'</span> <span class="ot">=</span> <span class="st">'Spanish'</span>, <span class="st">'3'</span> <span class="ot">=</span> <span class="st">'Other Indo-European languages'</span>, <span class="st">'4'</span> <span class="ot">=</span> <span class="st">"Asian and Pacific Island languages"</span>, <span class="st">'5'</span> <span class="ot">=</span> <span class="st">"Other Language"</span>)</span>
+<span id="cb32-377"><a href="#cb32-377" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-378"><a href="#cb32-378" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-379"><a href="#cb32-379" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">'HISPEED'</span> <span class="sc">%in%</span> <span class="fu">names</span>(return_tbl)){</span>
+<span id="cb32-380"><a href="#cb32-380" aria-hidden="true" tabindex="-1"></a>    return_tbl<span class="sc">$</span>HISPEED <span class="ot">&lt;-</span> <span class="fu">recode</span>(return_tbl<span class="sc">$</span>HISPEED, <span class="st">'0'</span> <span class="ot">=</span> <span class="st">"N/A (GQ/vacant/no paid access to the internet)"</span>, <span class="st">'1'</span> <span class="ot">=</span> <span class="st">"Yes"</span>, <span class="st">'2'</span> <span class="ot">=</span> <span class="st">"No"</span>)</span>
+<span id="cb32-381"><a href="#cb32-381" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-382"><a href="#cb32-382" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-383"><a href="#cb32-383" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-384"><a href="#cb32-384" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">'JWTRNS'</span> <span class="sc">%in%</span> <span class="fu">names</span>(return_tbl)){</span>
+<span id="cb32-385"><a href="#cb32-385" aria-hidden="true" tabindex="-1"></a>    return_tbl<span class="sc">$</span>JWTRNS <span class="ot">&lt;-</span> <span class="fu">recode</span>(return_tbl<span class="sc">$</span>JWTRNS, <span class="st">'0'</span> <span class="ot">=</span> <span class="st">"N/A (not a worker-not in the labor force, including persons under 16 years; unemployed; employed, with a job but not at work; Armed Forces, with a job but not at work)"</span>,  <span class="st">'1'</span> <span class="ot">=</span> <span class="st">'Car, truck, or van'</span>, <span class="st">'2'</span> <span class="ot">=</span> <span class="st">'Bus'</span>, <span class="st">'3'</span> <span class="ot">=</span> <span class="st">'Subway or elevated rail'</span>, <span class="st">'4'</span> <span class="ot">=</span> <span class="st">"Long-distance train or commuter rail"</span>, <span class="st">'5'</span> <span class="ot">=</span> <span class="st">"Light rail, streetcar, or trolley"</span>, <span class="st">'6'</span> <span class="ot">=</span> <span class="st">'Ferryboat'</span>, <span class="st">"07"</span> <span class="ot">=</span> <span class="st">"Taxicab"</span>, <span class="st">"08"</span> <span class="ot">=</span> <span class="st">"Motorcycle"</span>, <span class="st">"09"</span> <span class="ot">=</span> <span class="st">"Bicycle"</span>,  <span class="st">"10"</span> <span class="ot">=</span> <span class="st">"Walked"</span>, <span class="st">"11"</span> <span class="ot">=</span> <span class="st">"Worked from home"</span>, <span class="st">"12"</span> <span class="ot">=</span> <span class="st">"Other method"</span>)</span>
+<span id="cb32-386"><a href="#cb32-386" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-387"><a href="#cb32-387" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-388"><a href="#cb32-388" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">'SCH'</span> <span class="sc">%in%</span> <span class="fu">names</span>(return_tbl)){</span>
+<span id="cb32-389"><a href="#cb32-389" aria-hidden="true" tabindex="-1"></a>    return_tbl<span class="sc">$</span>SCH <span class="ot">&lt;-</span> <span class="fu">recode</span>(return_tbl<span class="sc">$</span>SCH, <span class="st">'0'</span> <span class="ot">=</span> <span class="st">"N/A (less than 3 years old)"</span>,  <span class="st">'1'</span> <span class="ot">=</span> <span class="st">'No, has not attended in the last 3 months'</span>, <span class="st">'2'</span> <span class="ot">=</span> <span class="st">'Yes, public school or public college'</span>, <span class="st">'3'</span> <span class="ot">=</span> <span class="st">'Yes, private school or college or home school'</span>)</span>
+<span id="cb32-390"><a href="#cb32-390" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-391"><a href="#cb32-391" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-392"><a href="#cb32-392" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">'SCHL'</span> <span class="sc">%in%</span> <span class="fu">names</span>(return_tbl)){</span>
+<span id="cb32-393"><a href="#cb32-393" aria-hidden="true" tabindex="-1"></a>    return_tbl<span class="sc">$</span>SCHL <span class="ot">&lt;-</span> <span class="fu">recode</span>(return_tbl<span class="sc">$</span>SCHL,</span>
+<span id="cb32-394"><a href="#cb32-394" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"16"</span> <span class="ot">=</span> <span class="st">"Regular high school diploma"</span>,</span>
+<span id="cb32-395"><a href="#cb32-395" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"No schooling completed"</span>,</span>
+<span id="cb32-396"><a href="#cb32-396" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"4"</span> <span class="ot">=</span> <span class="st">"Grade 1"</span>,</span>
+<span id="cb32-397"><a href="#cb32-397" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"Kindergarten"</span>,</span>
+<span id="cb32-398"><a href="#cb32-398" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"7"</span> <span class="ot">=</span> <span class="st">"Grade 4"</span>,</span>
+<span id="cb32-399"><a href="#cb32-399" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"23"</span> <span class="ot">=</span> <span class="st">"Professional degree beyond a bachelor's degree"</span>,</span>
+<span id="cb32-400"><a href="#cb32-400" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"19"</span> <span class="ot">=</span> <span class="st">"1 or more years of college credit, no degree"</span>,</span>
+<span id="cb32-401"><a href="#cb32-401" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"22"</span> <span class="ot">=</span> <span class="st">"Master's degree"</span>,</span>
+<span id="cb32-402"><a href="#cb32-402" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"10"</span> <span class="ot">=</span> <span class="st">"Grade 7"</span>,</span>
+<span id="cb32-403"><a href="#cb32-403" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"20"</span> <span class="ot">=</span> <span class="st">"Associate's degree"</span>,</span>
+<span id="cb32-404"><a href="#cb32-404" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"0"</span> <span class="ot">=</span> <span class="st">"N/A (less than 3 years old)"</span>,</span>
+<span id="cb32-405"><a href="#cb32-405" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"Nursery school, preschool"</span>,</span>
+<span id="cb32-406"><a href="#cb32-406" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"21"</span> <span class="ot">=</span> <span class="st">"Bachelor's degree"</span>,</span>
+<span id="cb32-407"><a href="#cb32-407" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"8"</span> <span class="ot">=</span> <span class="st">"Grade 5"</span>,</span>
+<span id="cb32-408"><a href="#cb32-408" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"24"</span> <span class="ot">=</span> <span class="st">"Doctorate degree"</span>,</span>
+<span id="cb32-409"><a href="#cb32-409" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"6"</span> <span class="ot">=</span> <span class="st">"Grade 3"</span>,</span>
+<span id="cb32-410"><a href="#cb32-410" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"14"</span> <span class="ot">=</span> <span class="st">"Grade 11"</span>,</span>
+<span id="cb32-411"><a href="#cb32-411" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"17"</span> <span class="ot">=</span> <span class="st">"GED or alternative credential"</span>,</span>
+<span id="cb32-412"><a href="#cb32-412" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"12"</span> <span class="ot">=</span> <span class="st">"Grade 9"</span>,</span>
+<span id="cb32-413"><a href="#cb32-413" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"15"</span> <span class="ot">=</span> <span class="st">"12th grade - no diploma"</span>,</span>
+<span id="cb32-414"><a href="#cb32-414" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"13"</span> <span class="ot">=</span> <span class="st">"Grade 10"</span>,</span>
+<span id="cb32-415"><a href="#cb32-415" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"5"</span> <span class="ot">=</span> <span class="st">"Grade 2"</span>,</span>
+<span id="cb32-416"><a href="#cb32-416" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"11"</span> <span class="ot">=</span> <span class="st">"Grade 8"</span>,</span>
+<span id="cb32-417"><a href="#cb32-417" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"18"</span> <span class="ot">=</span> <span class="st">"Some college, but less than 1 year"</span>,</span>
+<span id="cb32-418"><a href="#cb32-418" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"9"</span> <span class="ot">=</span> <span class="st">"Grade 6"</span>)</span>
+<span id="cb32-419"><a href="#cb32-419" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-420"><a href="#cb32-420" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-421"><a href="#cb32-421" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">'SEX'</span> <span class="sc">%in%</span> <span class="fu">names</span>(return_tbl)){</span>
+<span id="cb32-422"><a href="#cb32-422" aria-hidden="true" tabindex="-1"></a>    return_tbl<span class="sc">$</span>SEX <span class="ot">&lt;-</span> <span class="fu">recode</span>(return_tbl<span class="sc">$</span>SEX,</span>
+<span id="cb32-423"><a href="#cb32-423" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"Male"</span>,</span>
+<span id="cb32-424"><a href="#cb32-424" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"Female"</span>)</span>
+<span id="cb32-425"><a href="#cb32-425" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-426"><a href="#cb32-426" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-427"><a href="#cb32-427" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-428"><a href="#cb32-428" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-429"><a href="#cb32-429" aria-hidden="true" tabindex="-1"></a>  <span class="co">#finally we return the desired tibble</span></span>
+<span id="cb32-430"><a href="#cb32-430" aria-hidden="true" tabindex="-1"></a> return_tbl</span>
+<span id="cb32-431"><a href="#cb32-431" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-432"><a href="#cb32-432" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-433"><a href="#cb32-433" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-434"><a href="#cb32-434" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here we test the function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(<span class="at">year =</span> <span class="dv">2016</span>, <span class="at">num_var =</span> <span class="fu">c</span>(<span class="st">'GRPIP'</span>, <span class="st">'JWDP'</span>), <span class="at">cat_var =</span> <span class="fu">c</span>(<span class="st">'HISPEED'</span>), <span class="at">geography =</span> <span class="st">'Delaware'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8,873 × 5
+   PWGTP GRPIP JWDP       HISPEED                                        state
+   &lt;dbl&gt; &lt;dbl&gt; &lt;Period&gt;   &lt;fct&gt;                                          &lt;chr&gt;
+ 1    90     0 15H 5M 0S  Yes                                            10   
+ 2   153     0 15H 5M 0S  Yes                                            10   
+ 3    17     0 NA         N/A (GQ/vacant/no paid access to the internet) 10   
+ 4    19     0 NA         N/A (GQ/vacant/no paid access to the internet) 10   
+ 5    34     0 NA         No                                             10   
+ 6    65     0 NA         No                                             10   
+ 7    80     0 NA         No                                             10   
+ 8    66     0 NA         No                                             10   
+ 9    65     0 NA         No                                             10   
+10    61     0 18H 52M 0S Yes                                            10   
+# ℹ 8,863 more rows</code></pre>
+</div>
+</div>
+<p>Finally, we define a query function that allows the user to specify multiple years and returns the desired tibble with a <code>year</code> variable. We call this function <code>multiyr_query</code>. It will have the same arguments and defaults as the <code>query</code> function, except the <code>year</code> argument will be changed to <code>yrs</code>, which will take a vector of desired years, instead of a single year.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>multiyr_query <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">yrs =</span> <span class="fu">c</span>(<span class="dv">2022</span>), <span class="at">num_var =</span> <span class="fu">c</span>(<span class="st">'AGEP'</span>), <span class="at">cat_var =</span> <span class="fu">c</span>(<span class="st">'SEX'</span>), <span class="at">geography =</span> <span class="st">'Iowa'</span>){</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  init_lst <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(yrs)){</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    init_lst[[i]] <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">'year'</span> <span class="ot">=</span> yrs[i], <span class="fu">query</span>(<span class="at">year =</span> yrs[i], num_var, cat_var, geography))</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(init_lst)</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Test the<code>multiyr_query</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">multiyr_query</span>(<span class="at">yrs =</span> <span class="fu">c</span>(<span class="dv">2017</span>, <span class="dv">2021</span>), <span class="at">num_var =</span> <span class="fu">c</span>(<span class="st">'GASP'</span>), <span class="at">cat_var =</span> <span class="fu">c</span>(<span class="st">'HISPEED'</span>), <span class="at">geography =</span> <span class="st">'Delaware'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 18,367 × 5
+    year PWGTP  GASP HISPEED state
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;   &lt;chr&gt;
+ 1  2017    12     2 Yes     10   
+ 2  2017    12     2 Yes     10   
+ 3  2017   293     3 Yes     10   
+ 4  2017   405     3 Yes     10   
+ 5  2017   405     3 Yes     10   
+ 6  2017   105    70 No      10   
+ 7  2017   181    70 No      10   
+ 8  2017   116    70 No      10   
+ 9  2017   372     3 Yes     10   
+10  2017   148    30 Yes     10   
+# ℹ 18,357 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="writing-a-generic-function-for-summarizing" class="level2">
+<h2 class="anchored" data-anchor-id="writing-a-generic-function-for-summarizing">Writing a Generic Function for Summarizing</h2>
+<p>Logic of the method: Our summary.census() function is an S3 method that runs whenever we call summary() on an object with class census. The key idea is to compute weighted summaries using the person weight PWGTP, as recommended for ACS PUMS microdata.</p>
+<p>Detect variables to summarize. The function inspects the columns and, by default, treats all numeric columns except PWGTP as numeric targets and all non-numeric columns as categorical targets. Users can override this by passing num= and/or cat=.</p>
+<p>Weighted numeric summaries. For each selected numeric variable, we compute:</p>
+<p>The weighted mean is computed as:<br>
+<span class="math display">\[
+\bar{x}_w = \frac{\sum_i w_i x_i}{\sum_i w_i}
+\]</span></p>
+<p>The weighted standard deviation is computed as:<br>
+<span class="math display">\[
+s_w = \sqrt{\frac{\sum_i w_i x_i^2}{\sum_i w_i} - \bar{x}_w^2}
+\]</span></p>
+<p>We also report the number of non-missing values and the total weight used. All calculations coerce inputs to numeric and ignore missing values.</p>
+<p>Categorical summaries. For each selected categorical variable, we produce:</p>
+<p>Unweighted counts (simple frequencies)</p>
+<p>Weighted counts computed by summing PWGTP within each category level (implemented via tapply on the factorized column).</p>
+<p>Output: The result is a list with two tibbles: numeric_summary and categorical_summary. Printing the object shows a compact table of weighted means/SDs for numeric variables and weighted/unweighted counts for categorical variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>summary.census <span class="ot">&lt;-</span> <span class="cf">function</span>(object, <span class="at">num =</span> <span class="cn">NULL</span>, <span class="at">cat =</span> <span class="cn">NULL</span>, ...) {</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="st">'PWGTP'</span> <span class="sc">%in%</span> <span class="fu">names</span>(object)) <span class="fu">stop</span>(<span class="st">'PWGTP column is required'</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.numeric</span>(object<span class="sc">$</span>PWGTP)) object<span class="sc">$</span>PWGTP <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(object<span class="sc">$</span>PWGTP))</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  is_num <span class="ot">&lt;-</span> <span class="fu">vapply</span>(object, is.numeric, <span class="fu">logical</span>(<span class="dv">1</span>))</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  default_num <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">names</span>(object)[is_num], <span class="st">'PWGTP'</span>)</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  default_cat <span class="ot">&lt;-</span> <span class="fu">names</span>(object)[<span class="sc">!</span>is_num]</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  num <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">is.null</span>(num)) default_num <span class="cf">else</span> <span class="fu">intersect</span>(num, <span class="fu">names</span>(object))</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  cat <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">is.null</span>(cat)) default_cat <span class="cf">else</span> <span class="fu">intersect</span>(cat, <span class="fu">names</span>(object))</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  w_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(x, w) {</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(x)); w <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(w))</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(x<span class="sc">*</span>w, <span class="at">na.rm=</span><span class="cn">TRUE</span>) <span class="sc">/</span> <span class="fu">sum</span>(w, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>  w_sd <span class="ot">&lt;-</span> <span class="cf">function</span>(x, w) {</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(x)); w <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(w))</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>    mu <span class="ot">&lt;-</span> <span class="fu">w_mean</span>(x, w)</span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sqrt</span>(<span class="fu">sum</span>((x<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span>w, <span class="at">na.rm=</span><span class="cn">TRUE</span>)<span class="sc">/</span><span class="fu">sum</span>(w,<span class="at">na.rm=</span><span class="cn">TRUE</span>) <span class="sc">-</span> mu<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>  numeric_summary <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">length</span>(num)) purrr<span class="sc">::</span><span class="fu">map_dfr</span>(num, \(v){</span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(object[[v]]))</span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>    tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">var=</span>v,</span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a>                   <span class="at">n_nonmissing =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(x)),</span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a>                   <span class="at">weight_sum   =</span> <span class="fu">sum</span>(object<span class="sc">$</span>PWGTP, <span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a>                   <span class="at">w_mean       =</span> <span class="fu">w_mean</span>(x, object<span class="sc">$</span>PWGTP),</span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a>                   <span class="at">w_sd         =</span> <span class="fu">w_sd</span>(x, object<span class="sc">$</span>PWGTP))</span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a>  }) <span class="cf">else</span> <span class="cn">NULL</span></span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true" tabindex="-1"></a>  categorical_summary <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">length</span>(cat)) purrr<span class="sc">::</span><span class="fu">map_dfr</span>(cat, \(v){</span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true" tabindex="-1"></a>    fac <span class="ot">&lt;-</span> <span class="fu">factor</span>(object[[v]])</span>
+<span id="cb38-33"><a href="#cb38-33" aria-hidden="true" tabindex="-1"></a>    lv  <span class="ot">&lt;-</span> <span class="fu">levels</span>(fac)</span>
+<span id="cb38-34"><a href="#cb38-34" aria-hidden="true" tabindex="-1"></a>    unwt <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">table</span>(fac)[lv])</span>
+<span id="cb38-35"><a href="#cb38-35" aria-hidden="true" tabindex="-1"></a>    wt <span class="ot">&lt;-</span> <span class="fu">tapply</span>(object<span class="sc">$</span>PWGTP, fac, sum); wt <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(wt[lv]); wt[<span class="fu">is.na</span>(wt)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb38-36"><a href="#cb38-36" aria-hidden="true" tabindex="-1"></a>    tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">var=</span>v, <span class="at">level=</span>lv, <span class="at">unweighted_n=</span>unwt, <span class="at">weighted_n=</span>wt)</span>
+<span id="cb38-37"><a href="#cb38-37" aria-hidden="true" tabindex="-1"></a>  }) <span class="cf">else</span> <span class="cn">NULL</span></span>
+<span id="cb38-38"><a href="#cb38-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-39"><a href="#cb38-39" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">numeric_summary=</span>numeric_summary, <span class="at">categorical_summary=</span>categorical_summary)</span>
+<span id="cb38-40"><a href="#cb38-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">class</span>(out) <span class="ot">&lt;-</span> <span class="st">'summary.census'</span></span>
+<span id="cb38-41"><a href="#cb38-41" aria-hidden="true" tabindex="-1"></a>  out</span>
+<span id="cb38-42"><a href="#cb38-42" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb38-43"><a href="#cb38-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-44"><a href="#cb38-44" aria-hidden="true" tabindex="-1"></a>print.summary.census <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
+<span id="cb38-45"><a href="#cb38-45" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(x<span class="sc">$</span>numeric_summary)) {</span>
+<span id="cb38-46"><a href="#cb38-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Weighted numeric summary:</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb38-47"><a href="#cb38-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(dplyr<span class="sc">::</span><span class="fu">mutate</span>(x<span class="sc">$</span>numeric_summary,</span>
+<span id="cb38-48"><a href="#cb38-48" aria-hidden="true" tabindex="-1"></a>                        <span class="at">w_mean =</span> <span class="fu">round</span>(w_mean,<span class="dv">3</span>),</span>
+<span id="cb38-49"><a href="#cb38-49" aria-hidden="true" tabindex="-1"></a>                        <span class="at">w_sd   =</span> <span class="fu">round</span>(w_sd,<span class="dv">3</span>)))</span>
+<span id="cb38-50"><a href="#cb38-50" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb38-51"><a href="#cb38-51" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(x<span class="sc">$</span>categorical_summary)) {</span>
+<span id="cb38-52"><a href="#cb38-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Categorical counts (weighted/unweighted):</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb38-53"><a href="#cb38-53" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(x<span class="sc">$</span>categorical_summary)</span>
+<span id="cb38-54"><a href="#cb38-54" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb38-55"><a href="#cb38-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">invisible</span>(x)</span>
+<span id="cb38-56"><a href="#cb38-56" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="plot.census-weighted-boxplot" class="level3">
+<h3 class="anchored" data-anchor-id="plot.census-weighted-boxplot"><code>plot.census()</code> weighted boxplot</h3>
+<p>Logic of Plot.census()</p>
+<p>The <code>plot.census()</code> function is an S3 method that requires <strong>one numeric variable</strong> (<code>num_var</code>) and <strong>one categorical variable</strong> (<code>cat_var</code>).<br>
+Its goal is to draw a <strong>weighted boxplot</strong> by category, where quartiles respect the survey weights (<code>PWGTP</code>).</p>
+<p>Inputs:</p>
+<p>We extract three vectors from the census object:</p>
+<ul>
+<li>Numeric variable: <span class="math inline">\(y\)</span><br>
+</li>
+<li>Grouping factor: <span class="math inline">\(g\)</span><br>
+</li>
+<li>Weights: <span class="math inline">\(w = PWGTP\)</span></li>
+</ul>
+<p>Before calculations, missing or infinite values are removed to ensure valid weighted quantile estimates.</p>
+<p>Weighted Quantiles per Group:</p>
+<p>For each level of <span class="math inline">\(g\)</span>, we compute <strong>five key points</strong> using weighted cumulative sums:</p>
+<ul>
+<li>Minimum (0%)<br>
+</li>
+<li>First quartile (25%)<br>
+</li>
+<li>Median (50%)<br>
+</li>
+<li>Third quartile (75%)<br>
+</li>
+<li>Maximum (100%)</li>
+</ul>
+<p>Concretely:</p>
+<ol type="1">
+<li>Order <span class="math inline">\(y\)</span> within each group.<br>
+</li>
+<li>Compute cumulative weights <span class="math inline">\(W = \sum w_i\)</span>.<br>
+</li>
+<li>Scale to probabilities <span class="math inline">\(W / \sum W\)</span>.<br>
+</li>
+<li>Select the value of <span class="math inline">\(y\)</span> where the cumulative weight first exceeds the desired quantile <span class="math inline">\(p\)</span>.</li>
+</ol>
+<p>This ensures that quartiles and medians reflect the <strong>weighted distribution</strong>, not just raw counts.</p>
+</section>
+<section id="drawing-the-boxplot" class="level3">
+<h3 class="anchored" data-anchor-id="drawing-the-boxplot">Drawing the Boxplot</h3>
+<p>The pre-computed statistics (ymin, lower, middle, upper, ymax) are then passed directly to: ggplot2::geom_boxplot(stat = “identity”)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>plot.census <span class="ot">&lt;-</span> <span class="cf">function</span>(x, num_var, cat_var, ...) {</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">inherits</span>(x, <span class="st">"census"</span>))</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">missing</span>(num_var) <span class="sc">||</span> <span class="fu">missing</span>(cat_var)) <span class="fu">stop</span>(<span class="st">"Provide one numeric and one categorical var"</span>)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> x</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  y  <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(df[[num_var]]))</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  g  <span class="ot">&lt;-</span> <span class="fu">factor</span>(df[[cat_var]])</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  w  <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(df<span class="sc">$</span>PWGTP))</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  wq <span class="ot">&lt;-</span> <span class="cf">function</span>(x, w, p) {</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    ok <span class="ot">&lt;-</span> <span class="fu">is.finite</span>(x) <span class="sc">&amp;</span> <span class="fu">is.finite</span>(w)</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> x[ok]; w <span class="ot">&lt;-</span> w[ok]</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">length</span>(x)) <span class="fu">return</span>(<span class="cn">NA_real_</span>)</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>    o <span class="ot">&lt;-</span> <span class="fu">order</span>(x); x <span class="ot">&lt;-</span> x[o]; w <span class="ot">&lt;-</span> w[o]</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>    cw <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(w) <span class="sc">/</span> <span class="fu">sum</span>(w)</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>    x[<span class="fu">which.max</span>(cw <span class="sc">&gt;=</span> p)]</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>  bx <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">.g =</span> g, <span class="at">.y =</span> y, <span class="at">.w =</span> w) <span class="sc">|&gt;</span></span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(.g) <span class="sc">|&gt;</span></span>
+<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymin   =</span> <span class="fu">wq</span>(.y, .w, <span class="dv">0</span>),</span>
+<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">lower  =</span> <span class="fu">wq</span>(.y, .w, .<span class="dv">25</span>),</span>
+<span id="cb39-24"><a href="#cb39-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">middle =</span> <span class="fu">wq</span>(.y, .w, .<span class="dv">5</span>),</span>
+<span id="cb39-25"><a href="#cb39-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">upper  =</span> <span class="fu">wq</span>(.y, .w, .<span class="dv">75</span>),</span>
+<span id="cb39-26"><a href="#cb39-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymax   =</span> <span class="fu">wq</span>(.y, .w, <span class="dv">1</span>),</span>
+<span id="cb39-27"><a href="#cb39-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb39-28"><a href="#cb39-28" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb39-29"><a href="#cb39-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-30"><a href="#cb39-30" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(bx, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> .g)) <span class="sc">+</span></span>
+<span id="cb39-31"><a href="#cb39-31" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">geom_boxplot</span>(</span>
+<span id="cb39-32"><a href="#cb39-32" aria-hidden="true" tabindex="-1"></a>      ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">ymin =</span> ymin, <span class="at">lower =</span> lower, <span class="at">middle =</span> middle, <span class="at">upper =</span> upper, <span class="at">ymax =</span> ymax),</span>
+<span id="cb39-33"><a href="#cb39-33" aria-hidden="true" tabindex="-1"></a>      <span class="at">stat =</span> <span class="st">"identity"</span></span>
+<span id="cb39-34"><a href="#cb39-34" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb39-35"><a href="#cb39-35" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">x =</span> cat_var, <span class="at">y =</span> num_var)</span>
+<span id="cb39-36"><a href="#cb39-36" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="worked-examples-for-the-narrative" class="level2">
+<h2 class="anchored" data-anchor-id="worked-examples-for-the-narrative">Worked Examples for the narrative</h2>
+<section id="single-year-north-carolina-agep-by-sex" class="level3">
+<h3 class="anchored" data-anchor-id="single-year-north-carolina-agep-by-sex">Single year — North Carolina, AGEP by SEX</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># helper to ensure S3 class stays after any operations</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>as_census <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">class</span>(x) <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">c</span>(<span class="st">"census"</span>, <span class="fu">class</span>(x)))</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  x</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Smaller, quick: one state only</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>nc <span class="ot">&lt;-</span> <span class="fu">as_census</span>(<span class="fu">query</span>(<span class="dv">2022</span>, <span class="at">num_var =</span> <span class="fu">c</span>(<span class="st">'AGEP'</span>), <span class="at">cat_var =</span> <span class="fu">c</span>(<span class="st">'SEX'</span>), <span class="at">geography =</span> <span class="st">'North Carolina'</span>))</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(nc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Weighted numeric summary:
+# A tibble: 1 × 5
+  var   n_nonmissing weight_sum w_mean  w_sd
+  &lt;chr&gt;        &lt;int&gt;      &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+1 AGEP        109230   10698973   39.6  23.2
+
+Categorical counts (weighted/unweighted):
+# A tibble: 3 × 4
+  var   level  unweighted_n weighted_n
+  &lt;chr&gt; &lt;chr&gt;         &lt;int&gt;      &lt;dbl&gt;
+1 SEX   Male          53050    5228672
+2 SEX   Female        56180    5470301
+3 state 37           109230   10698973</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(nc, <span class="at">num_var =</span> <span class="st">'AGEP'</span>, <span class="at">cat_var =</span> <span class="st">'SEX'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project1_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="multi-year-iowa-gasp-by-hispeed-2017-2021" class="level3">
+<h3 class="anchored" data-anchor-id="multi-year-iowa-gasp-by-hispeed-2017-2021">Multi-year — Iowa, GASP by HISPEED (2017 &amp; 2021)</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>ex <span class="ot">&lt;-</span> <span class="fu">as_census</span>(<span class="fu">multiyr_query</span>(<span class="at">yrs =</span> <span class="fu">c</span>(<span class="dv">2017</span>, <span class="dv">2021</span>),</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">num_var =</span> <span class="fu">c</span>(<span class="st">'GASP'</span>),</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">cat_var =</span> <span class="fu">c</span>(<span class="st">'HISPEED'</span>),</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>                              <span class="at">geography =</span> <span class="st">'Iowa'</span>))</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Weighted numeric summary:
+# A tibble: 2 × 5
+  var   n_nonmissing weight_sum w_mean  w_sd
+  &lt;chr&gt;        &lt;int&gt;      &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+1 year         65028    6338790 2019.    2  
+2 GASP         65028    6338790   49.4  74.4
+
+Categorical counts (weighted/unweighted):
+# A tibble: 4 × 4
+  var     level                                          unweighted_n weighted_n
+  &lt;chr&gt;   &lt;chr&gt;                                                 &lt;int&gt;      &lt;dbl&gt;
+1 HISPEED N/A (GQ/vacant/no paid access to the internet)        10086     807645
+2 HISPEED Yes                                                   44200    4524492
+3 HISPEED No                                                    10742    1006653
+4 state   19                                                    65028    6338790</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ex, <span class="at">num_var =</span> <span class="st">'GASP'</span>, <span class="at">cat_var =</span> <span class="st">'HISPEED'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Project1_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="interesting-observations" class="level2">
+<h2 class="anchored" data-anchor-id="interesting-observations">Interesting Observations</h2>
+<p>Using 2022 ACS data for <strong>North Carolina</strong>, we compared the distribution of <strong>age (AGEP)</strong> between males and females.<br>
+The weighted mean age was <strong>39.6 years</strong> with a standard deviation of <strong>23.2 years</strong>, based on about <strong>10.7 million weighted individuals</strong>.<br>
+The weighted counts showed <strong>~5.2 million males</strong> and <strong>~5.5 million females</strong>, suggesting a balanced gender distribution.<br>
+The weighted boxplot confirmed that both sexes had a wide and overlapping age distribution, with no substantial differences in central tendency or spread.</p>
+<p>We also examined <strong>gas utility costs (GASP)</strong> by <strong>high-speed internet access (HISPEED)</strong> in <strong>Iowa</strong> for 2017 and 2021.<br>
+The weighted mean gas cost was <strong>$49.4</strong> with a standard deviation of <strong>$74.4</strong>, across approximately <strong>6.3 million weighted households</strong>.<br>
+Households with internet access (“Yes”) represented the largest group (<strong>~4.5 million</strong>), followed by those without access (“No”, <strong>~1.0 million</strong>), and those where internet status was not applicable (“N/A”, <strong>~0.8 million</strong>).<br>
+The boxplots showed that gas costs were generally higher and more variable in households with internet access, while the N/A group had consistently lower costs.<br>
+This suggests a potential link between household resources (like internet access) and utility expenditures, although further analysis would be needed to confirm causality.</p>
+<p>Overall, these examples illustrate how the functions we built can query ACS PUMS data, apply weights, and generate meaningful summaries and plots.<br>
+By adjusting arguments such as <code>geography</code>, <code>num_var</code>, and <code>cat_var</code>, we can explore many other combinations of states, years, and household characteristics to uncover additional patterns.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
