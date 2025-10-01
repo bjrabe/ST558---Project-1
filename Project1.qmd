@@ -555,7 +555,7 @@ Suppose we wanted to specify region without filtering for a particular one.
 query(geography = 'Region')
 ```
 
-The query takes some time to run because there are so many rows of data, but it does work as desired.
+The query takes quite some time to run (somewhere around 2 minutes and 30 seconds on one of the author's devices) because there are so many rows of data, but it does work as desired.
 
 Now, we define a query function that allows the user to specify multiple years and returns the desired tibble with a `year` variable. We call this function `multiyr_query`. It will have the same arguments and defaults as the `query` function, except the `year` argument will be changed to `yrs`, which will take a vector of desired years, instead of a single year. 
 
