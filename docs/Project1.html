@@ -237,7 +237,9 @@ The following object is masked from 'package:purrr':
 
     flatten</code></pre>
 </div>
+
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 </div>
 <p>Next, we start our data processing step by getting the process to work with a particular URL. We will use the URL provided on page 3 of the pdf which describes the requirements for Project 1.</p>
 <p>The first step creates a string for the URL.</p>
@@ -815,6 +817,7 @@ The following object is masked from 'package:purrr':
 <div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">multiyr_query</span>(<span class="at">yrs =</span> <span class="fu">c</span>(<span class="dv">2017</span>, <span class="dv">2021</span>), <span class="at">num_var =</span> <span class="fu">c</span>(<span class="st">'GASP'</span>), <span class="at">cat_var =</span> <span class="fu">c</span>(<span class="st">'HISPEED'</span>), <span class="at">geography =</span> <span class="st">'Delaware'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
+
 <pre><code># A tibble: 18,367 × 5
     year PWGTP  GASP HISPEED state
    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;   &lt;chr&gt;

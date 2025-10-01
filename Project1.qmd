@@ -555,6 +555,7 @@ multiyr_query <- function(yrs = c(2022), num_var = c('AGEP'), cat_var = c('SEX')
 
 Test the`multiyr_query` function.
 
+
 ```{r}
 multiyr_query(yrs = c(2017, 2021), num_var = c('GASP'), cat_var = c('HISPEED'), geography = 'Delaware')
 ```
