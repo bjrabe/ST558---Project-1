@@ -2,6 +2,7 @@
 title: "ST558 - Project 1"
 authors: Brian Rabe and Michelle Silveira
 format: html
+code-overflow: wrap
 editor: visual
 editor_options: 
   chunk_output_type: console
@@ -75,10 +76,10 @@ helper <- function(URL){
 }
 ```
 
-We test the helper function on 2023 public use microdata and see it functions as desired.
+We test the helper function on 2023 public use microdata.
 
 ```{r}
-test <- helper('https://api.census.gov/data/2023/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24')
+helper('https://api.census.gov/data/2023/acs/acs1/pums?get=SEX,PWGTP,MAR&SCHL=24')
 ```
 
 We see from the output that the function behaves as desired.
@@ -440,7 +441,7 @@ JWDP_lookup <- sort(JWDP_lookup, na.last = F)
   URL_final <- paste0(paste(URL_1, URL_2, URL_3, sep = ','), URL_4)
   
 
-  #The previously created helper function is used to return the desired tibble in character form, which is stored in object data_character
+  #The previously created helper function is used to return the desired tibble in character form, which is stored in object return_tbl
   return_tbl <- helper(URL_final)
   
   
@@ -532,8 +533,7 @@ JWDP_lookup <- sort(JWDP_lookup, na.last = F)
 }
 ```
 
-Here we test the function.
-We start with the default arguments.
+Here we test the function. We start with the default arguments.
 
 ```{r}
 query()
@@ -541,15 +541,15 @@ query()
 
 We see from calling the default that `PWGTP` and `AGEP` are returned as doubles, `SEX` is returned as a factor, and the default `state` column is returned. This behaves as desired.
 
-Next we will specify some different variables for the arguments. 
+Next we will specify some different variables for the arguments.
 
 ```{r}
 query(year = 2016, num_var = c('GRPIP', 'JWDP'), cat_var = c('HISPEED'), geography = 'Delaware')
 ```
 
-As desired, `PWGTP` is returned even though we did not specify it as a desired variable. `GRPIP` and `JWDP` are returned as requested. We can see `JWDP` is a time-type object as desired. `HISPEED` is a factor and the desired state (Delaware) is returned. 
+As desired, `PWGTP` is returned even though we did not specify it as a desired variable. `GRPIP` and `JWDP` are returned as requested. We can see `JWDP` is a time-type object as desired. `HISPEED` is a factor and the desired state (Delaware) is returned.
 
-Suppose we wanted to specify region without filtering for a particular one. 
+Suppose we wanted to specify region without filtering for a particular one.
 
 ```{r}
 query(geography = 'Region')
@@ -557,8 +557,7 @@ query(geography = 'Region')
 
 The query takes quite some time to run (somewhere around 2 minutes and 30 seconds on one of the author's devices) because there are so many rows of data, but it does work as desired.
 
-Now, we define a query function that allows the user to specify multiple years and returns the desired tibble with a `year` variable. We call this function `multiyr_query`. It will have the same arguments and defaults as the `query` function, except the `year` argument will be changed to `yrs`, which will take a vector of desired years, instead of a single year. 
-
+Now, we define a query function that allows the user to specify multiple years and returns the desired tibble with a `year` variable. We call this function `multiyr_query`. It will have the same arguments and defaults as the `query` function, except the `year` argument will be changed to `yrs`, which will take a vector of desired years, instead of a single year.
 
 ```{r}
 
@@ -573,13 +572,11 @@ multiyr_query <- function(yrs = c(2022), num_var = c('AGEP'), cat_var = c('SEX')
 
 ```
 
-Here we test the`multiyr_query` function, requesting data from years 2017 and 2021. 
-
+Here we test the`multiyr_query` function, requesting data from years 2017 and 2021.
 
 ```{r}
 multiyr_query(yrs = c(2017, 2021), num_var = c('GASP'), cat_var = c('HISPEED'), geography = 'Delaware')
 ```
-
 
 From the first few rows of the tibble which are printed it isn't clear that 2021 is included, since all 2017 rows are listed first. We will print out only the tail of the tibble to see if the 2021 rows are at the end.
 
@@ -587,8 +584,7 @@ From the first few rows of the tibble which are printed it isn't clear that 2021
 tail(multiyr_query(yrs = c(2017, 2021), num_var = c('GASP'), cat_var = c('HISPEED'), geography = 'Delaware'))
 ```
 
-Indeed they are. 
-
+Indeed they are.
 
 ## Writing a Generic Function for Summarizing
 
@@ -616,8 +612,7 @@ Unweighted counts (simple frequencies)
 
 Weighted counts computed by summing PWGTP within each category level (implemented via tapply on the factorized column).
 
-Output: The result is a list with two tibbles: numeric_summary and categorical_summary. 
-Printing the object shows a compact table of weighted means/SDs for numeric variables and weighted/unweighted counts for categorical variables.
+Output: The result is a list with two tibbles: numeric_summary and categorical_summary. Printing the object shows a compact table of weighted means/SDs for numeric variables and weighted/unweighted counts for categorical variables.
 
 ```{r}
 summary.census <- function(object, num = NULL, cat = NULL, ...) {
@@ -679,18 +674,19 @@ print.summary.census <- function(x, ...) {
 ```
 
 ### `plot.census()` weighted boxplot
+
 Logic of Plot.census()
 
-The `plot.census()` function is an S3 method that requires **one numeric variable** (`num_var`) and **one categorical variable** (`cat_var`).  
+The `plot.census()` function is an S3 method that requires **one numeric variable** (`num_var`) and **one categorical variable** (`cat_var`).\
 Its goal is to draw a **weighted boxplot** by category, where quartiles respect the survey weights (`PWGTP`).
 
 Inputs:
 
 We extract three vectors from the census object:
 
-- Numeric variable: $y$  
-- Grouping factor: $g$  
-- Weights: $w = PWGTP$  
+-   Numeric variable: $y$\
+-   Grouping factor: $g$\
+-   Weights: $w = PWGTP$
 
 Before calculations, missing or infinite values are removed to ensure valid weighted quantile estimates.
 
@@ -698,26 +694,24 @@ Weighted Quantiles per Group:
 
 For each level of $g$, we compute **five key points** using weighted cumulative sums:
 
-- Minimum (0%)  
-- First quartile (25%)  
-- Median (50%)  
-- Third quartile (75%)  
-- Maximum (100%)  
+-   Minimum (0%)\
+-   First quartile (25%)\
+-   Median (50%)\
+-   Third quartile (75%)\
+-   Maximum (100%)
 
 Concretely:
 
-1. Order $y$ within each group.  
-2. Compute cumulative weights $W = \sum w_i$.  
-3. Scale to probabilities $W / \sum W$.  
-4. Select the value of $y$ where the cumulative weight first exceeds the desired quantile $p$.  
+1.  Order $y$ within each group.\
+2.  Compute cumulative weights $W = \sum w_i$.\
+3.  Scale to probabilities $W / \sum W$.\
+4.  Select the value of $y$ where the cumulative weight first exceeds the desired quantile $p$.
 
 This ensures that quartiles and medians reflect the **weighted distribution**, not just raw counts.
 
 ### Drawing the Boxplot
 
-The pre-computed statistics (ymin, lower, middle, upper, ymax) are then passed directly to: 
-ggplot2::geom_boxplot(stat = "identity")
-
+The pre-computed statistics (ymin, lower, middle, upper, ymax) are then passed directly to: ggplot2::geom_boxplot(stat = "identity")
 
 ```{r}
 plot.census <- function(x, num_var, cat_var, ...) {
