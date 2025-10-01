@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2025-10-01">
 
 <title>ST558 - Project 1</title>
 <style>
@@ -159,6 +160,12 @@ window.Quarto = {
           </div>
   </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 1, 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -219,8 +226,8 @@ The following object is masked from 'package:purrr':
  $ all_headers:List of 1
  $ cookies    :'data.frame':    1 obs. of  7 variables:
  $ content    : raw [1:937508] 5b 5b 22 53 ...
- $ date       : POSIXct[1:1], format: "2025-10-01 05:01:40"
- $ times      : Named num [1:6] 0 0.0124 0.0448 0.1217 0.5013 ...
+ $ date       : POSIXct[1:1], format: "2025-10-01 05:23:21"
+ $ times      : Named num [1:6] 0 0.0446 0.0758 0.1536 0.5526 ...
   ..- attr(*, "names")= chr [1:6] "redirect" "namelookup" "connect" "pretransfer" ...
  $ request    :List of 7
   ..- attr(*, "class")= chr "request"
@@ -239,11 +246,11 @@ The following object is masked from 'package:purrr':
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1]  [,2]    [,3]  [,4]  
 [1,] "SEX" "PWGTP" "MAR" "SCHL"
-[2,] "2"   "110"   "1"   "24"  
-[3,] "1"   "102"   "1"   "24"  
-[4,] "2"   "74"    "1"   "24"  
-[5,] "1"   "199"   "1"   "24"  
-[6,] "1"   "15"    "2"   "24"  </code></pre>
+[2,] "2"   "6"     "5"   "24"  
+[3,] "2"   "23"    "2"   "24"  
+[4,] "1"   "23"    "3"   "24"  
+[5,] "1"   "80"    "5"   "24"  
+[6,] "1"   "16"    "1"   "24"  </code></pre>
 </div>
 </div>
 <p>From the printout of the <code>parsed</code> object, we see that it is a character matrix with the column names assuming the first row of the matrix. In the next step we fix this by removing the first row and assigning it as the names of the object.</p>
@@ -253,12 +260,12 @@ The following object is masked from 'package:purrr':
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(parsed_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     SEX PWGTP MAR SCHL
-[1,] "2" "110" "1" "24"
-[2,] "1" "102" "1" "24"
-[3,] "2" "74"  "1" "24"
-[4,] "1" "199" "1" "24"
-[5,] "1" "15"  "2" "24"
-[6,] "2" "19"  "3" "24"</code></pre>
+[1,] "2" "6"   "5" "24"
+[2,] "2" "23"  "2" "24"
+[3,] "1" "23"  "3" "24"
+[4,] "1" "80"  "5" "24"
+[5,] "1" "16"  "1" "24"
+[6,] "1" "107" "3" "24"</code></pre>
 </div>
 </div>
 <p>Now that the matrix is in the desired form, we use the <code>as_tibble()</code> function from the <code>dplyr</code> package to convert it into a tibble.</p>
@@ -269,16 +276,16 @@ The following object is masked from 'package:purrr':
 <pre><code># A tibble: 44,079 × 4
    SEX   PWGTP MAR   SCHL 
    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
- 1 2     110   1     24   
- 2 1     102   1     24   
- 3 2     74    1     24   
- 4 1     199   1     24   
- 5 1     15    2     24   
- 6 2     19    3     24   
- 7 2     97    1     24   
- 8 1     64    1     24   
- 9 1     64    1     24   
-10 2     65    1     24   
+ 1 2     6     5     24   
+ 2 2     23    2     24   
+ 3 1     23    3     24   
+ 4 1     80    5     24   
+ 5 1     16    1     24   
+ 6 1     107   3     24   
+ 7 2     10    5     24   
+ 8 1     22    1     24   
+ 9 2     127   5     24   
+10 2     46    5     24   
 # ℹ 44,069 more rows</code></pre>
 </div>
 </div>
@@ -668,7 +675,7 @@ The following object is masked from 'package:purrr':
 <span id="cb20-342"><a href="#cb20-342" aria-hidden="true" tabindex="-1"></a>  URL_final <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">paste</span>(URL_1, URL_2, URL_3, <span class="at">sep =</span> <span class="st">','</span>), URL_4)</span>
 <span id="cb20-343"><a href="#cb20-343" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb20-344"><a href="#cb20-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-345"><a href="#cb20-345" aria-hidden="true" tabindex="-1"></a>  <span class="co">#The previously created helper function is used to return the desired tibble in character form, which is stored in object data_character</span></span>
+<span id="cb20-345"><a href="#cb20-345" aria-hidden="true" tabindex="-1"></a>  <span class="co">#The previously created helper function is used to return the desired tibble in character form, which is stored in object return_tbl</span></span>
 <span id="cb20-346"><a href="#cb20-346" aria-hidden="true" tabindex="-1"></a>  return_tbl <span class="ot">&lt;-</span> <span class="fu">helper</span>(URL_final)</span>
 <span id="cb20-347"><a href="#cb20-347" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb20-348"><a href="#cb20-348" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -859,12 +866,12 @@ The following object is masked from 'package:purrr':
 <pre><code># A tibble: 6 × 5
    year PWGTP  GASP HISPEED state
   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;   &lt;chr&gt;
-1  2021    67     3 Yes     10   
-2  2021    81     3 Yes     10   
-3  2021    91     3 Yes     10   
-4  2021   428    30 Yes     10   
-5  2021   236    30 Yes     10   
-6  2021   206    30 Yes     10   </code></pre>
+1  2021    22    50 Yes     10   
+2  2021   103    30 Yes     10   
+3  2021    68    30 Yes     10   
+4  2021    79    30 Yes     10   
+5  2021    85     3 Yes     10   
+6  2021   106     3 Yes     10   </code></pre>
 </div>
 </div>
 <p>Indeed they are.</p>
