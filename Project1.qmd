@@ -91,7 +91,7 @@ The arguments to the function will be `year`, `num_var`, `cat_var`, and `geograp
 
 2.  `num_var`: User provides the desired numeric variables in the form of a character vector. As an example, provide `c('GASP', 'JWAP')` to the `num_var`argument to return the variables GASP and JWAP in the tibble. PWGTP will always be returned in the tibble even if not explicitly requested. AGEP and PWGTP are the default numeric variables returned in the tibble if no `num_var` argument is provided. Note that the time variables JWAP and JWDP are returned in military time so the result can be numeric. A result of NA means 'not a worker or worked from home.'
 
-3.  `cat_var`: User provides the desired categorical variables in the form of a character vector. As an example, provide `c('FER', 'HHL')` to the `cat_var` argument to return the variables FER and HHL in the tibble. SEX is the default categorical variable returned in the tibble if no `cat_var` argument is provided. 
+3.  `cat_var`: User provides the desired categorical variables in the form of a character vector. As an example, provide `c('FER', 'HHL')` to the `cat_var` argument to return the variables FER and HHL in the tibble. SEX is the default categorical variable returned in the tibble if no `cat_var` argument is provided.
 
 4.  `geography`: This is a rather flexible argument. The user can specify a specific state, region, or division to filter the data by. If a state, region, or division is passed to this argument, only the data from that state/region/division will be returned in the tibble (specifically, the corresponding codes will be returned, not the actual names). The desired state, region, or division should be passed to the argument as a string. The set of allowable states, regions, and divisions can be found at https://api.census.gov/data/2022/acs/acs1/pums/variables.html. The user must provide the state name itself, not the state code or the state abbreviation. The regions and divisions must be typed precisely as listed on the provided Census website; otherwise an error will be thrown. If the user wishes not to filter by state/region/division, but rather, to return all data values with the state specified in a column of the tibble, they should pass the argument 'State' to `geography`. Again, this will return the state code, not the name of the state. Likewise they can pass 'Region' or 'Division' to the `geography` argument to return a Region or Division column without filtering. Finally, if the argument 'All' is passed to `geography`, all data will be returned with no filtering and no geography column.
 
@@ -538,7 +538,7 @@ Here we test the function.
 query(year = 2016, num_var = c('GRPIP', 'JWDP'), cat_var = c('HISPEED'), geography = 'Delaware')
 ```
 
-Finally, we define a query function that allows the user to specify multiple years and returns the desired tibble with a `year` variable. We call this function `multiyr_query`. It will have the same arguments and defaults as the `query` function, except the `year` argument will be changed to `yrs`, which will take a vector of desired years, instead of a single year. 
+Finally, we define a query function that allows the user to specify multiple years and returns the desired tibble with a `year` variable. We call this function `multiyr_query`. It will have the same arguments and defaults as the `query` function, except the `year` argument will be changed to `yrs`, which will take a vector of desired years, instead of a single year.
 
 ```{r}
 
@@ -555,11 +555,221 @@ multiyr_query <- function(yrs = c(2022), num_var = c('AGEP'), cat_var = c('SEX')
 
 Test the`multiyr_query` function.
 
+
 ```{r}
 multiyr_query(yrs = c(2017, 2021), num_var = c('GASP'), cat_var = c('HISPEED'), geography = 'Delaware')
 ```
 
-
 ## Writing a Generic Function for Summarizing
 
-## Interesting Investigation
+Logic of the method: Our summary.census() function is an S3 method that runs whenever we call summary() on an object with class census. The key idea is to compute weighted summaries using the person weight PWGTP, as recommended for ACS PUMS microdata.
+
+Detect variables to summarize. The function inspects the columns and, by default, treats all numeric columns except PWGTP as numeric targets and all non-numeric columns as categorical targets. Users can override this by passing num= and/or cat=.
+
+Weighted numeric summaries. For each selected numeric variable, we compute:
+
+The weighted mean is computed as:\
+$$
+\bar{x}_w = \frac{\sum_i w_i x_i}{\sum_i w_i}
+$$
+
+The weighted standard deviation is computed as:\
+$$
+s_w = \sqrt{\frac{\sum_i w_i x_i^2}{\sum_i w_i} - \bar{x}_w^2}
+$$
+
+We also report the number of non-missing values and the total weight used. All calculations coerce inputs to numeric and ignore missing values.
+
+Categorical summaries. For each selected categorical variable, we produce:
+
+Unweighted counts (simple frequencies)
+
+Weighted counts computed by summing PWGTP within each category level (implemented via tapply on the factorized column).
+
+Output: The result is a list with two tibbles: numeric_summary and categorical_summary. 
+Printing the object shows a compact table of weighted means/SDs for numeric variables and weighted/unweighted counts for categorical variables.
+
+```{r}
+summary.census <- function(object, num = NULL, cat = NULL, ...) {
+  if (!'PWGTP' %in% names(object)) stop('PWGTP column is required')
+  if (!is.numeric(object$PWGTP)) object$PWGTP <- suppressWarnings(as.numeric(object$PWGTP))
+
+  is_num <- vapply(object, is.numeric, logical(1))
+  default_num <- setdiff(names(object)[is_num], 'PWGTP')
+  default_cat <- names(object)[!is_num]
+
+  num <- if (is.null(num)) default_num else intersect(num, names(object))
+  cat <- if (is.null(cat)) default_cat else intersect(cat, names(object))
+
+  w_mean <- function(x, w) {
+    x <- suppressWarnings(as.numeric(x)); w <- suppressWarnings(as.numeric(w))
+    sum(x*w, na.rm=TRUE) / sum(w, na.rm=TRUE)
+  }
+  w_sd <- function(x, w) {
+    x <- suppressWarnings(as.numeric(x)); w <- suppressWarnings(as.numeric(w))
+    mu <- w_mean(x, w)
+    sqrt(sum((x^2)*w, na.rm=TRUE)/sum(w,na.rm=TRUE) - mu^2)
+  }
+
+  numeric_summary <- if (length(num)) purrr::map_dfr(num, \(v){
+    x <- suppressWarnings(as.numeric(object[[v]]))
+    tibble::tibble(var=v,
+                   n_nonmissing = sum(!is.na(x)),
+                   weight_sum   = sum(object$PWGTP, na.rm=TRUE),
+                   w_mean       = w_mean(x, object$PWGTP),
+                   w_sd         = w_sd(x, object$PWGTP))
+  }) else NULL
+
+  categorical_summary <- if (length(cat)) purrr::map_dfr(cat, \(v){
+    fac <- factor(object[[v]])
+    lv  <- levels(fac)
+    unwt <- as.integer(table(fac)[lv])
+    wt <- tapply(object$PWGTP, fac, sum); wt <- as.numeric(wt[lv]); wt[is.na(wt)] <- 0
+    tibble::tibble(var=v, level=lv, unweighted_n=unwt, weighted_n=wt)
+  }) else NULL
+
+  out <- list(numeric_summary=numeric_summary, categorical_summary=categorical_summary)
+  class(out) <- 'summary.census'
+  out
+}
+
+print.summary.census <- function(x, ...) {
+  if (!is.null(x$numeric_summary)) {
+    cat("\nWeighted numeric summary:\n")
+    print(dplyr::mutate(x$numeric_summary,
+                        w_mean = round(w_mean,3),
+                        w_sd   = round(w_sd,3)))
+  }
+  if (!is.null(x$categorical_summary)) {
+    cat("\nCategorical counts (weighted/unweighted):\n")
+    print(x$categorical_summary)
+  }
+  invisible(x)
+}
+```
+
+### `plot.census()` weighted boxplot
+Logic of Plot.census()
+
+The `plot.census()` function is an S3 method that requires **one numeric variable** (`num_var`) and **one categorical variable** (`cat_var`).  
+Its goal is to draw a **weighted boxplot** by category, where quartiles respect the survey weights (`PWGTP`).
+
+Inputs:
+
+We extract three vectors from the census object:
+
+- Numeric variable: $y$  
+- Grouping factor: $g$  
+- Weights: $w = PWGTP$  
+
+Before calculations, missing or infinite values are removed to ensure valid weighted quantile estimates.
+
+Weighted Quantiles per Group:
+
+For each level of $g$, we compute **five key points** using weighted cumulative sums:
+
+- Minimum (0%)  
+- First quartile (25%)  
+- Median (50%)  
+- Third quartile (75%)  
+- Maximum (100%)  
+
+Concretely:
+
+1. Order $y$ within each group.  
+2. Compute cumulative weights $W = \sum w_i$.  
+3. Scale to probabilities $W / \sum W$.  
+4. Select the value of $y$ where the cumulative weight first exceeds the desired quantile $p$.  
+
+This ensures that quartiles and medians reflect the **weighted distribution**, not just raw counts.
+
+### Drawing the Boxplot
+
+The pre-computed statistics (ymin, lower, middle, upper, ymax) are then passed directly to: 
+ggplot2::geom_boxplot(stat = "identity")
+
+
+```{r}
+plot.census <- function(x, num_var, cat_var, ...) {
+  stopifnot(inherits(x, "census"))
+  if (missing(num_var) || missing(cat_var)) stop("Provide one numeric and one categorical var")
+
+  df <- x
+  y  <- suppressWarnings(as.numeric(df[[num_var]]))
+  g  <- factor(df[[cat_var]])
+  w  <- suppressWarnings(as.numeric(df$PWGTP))
+
+  wq <- function(x, w, p) {
+    ok <- is.finite(x) & is.finite(w)
+    x <- x[ok]; w <- w[ok]
+    if (!length(x)) return(NA_real_)
+    o <- order(x); x <- x[o]; w <- w[o]
+    cw <- cumsum(w) / sum(w)
+    x[which.max(cw >= p)]
+  }
+
+  bx <- dplyr::tibble(.g = g, .y = y, .w = w) |>
+    dplyr::group_by(.g) |>
+    dplyr::summarise(
+      ymin   = wq(.y, .w, 0),
+      lower  = wq(.y, .w, .25),
+      middle = wq(.y, .w, .5),
+      upper  = wq(.y, .w, .75),
+      ymax   = wq(.y, .w, 1),
+      .groups = "drop"
+    )
+
+  ggplot2::ggplot(bx, ggplot2::aes(x = .g)) +
+    ggplot2::geom_boxplot(
+      ggplot2::aes(ymin = ymin, lower = lower, middle = middle, upper = upper, ymax = ymax),
+      stat = "identity"
+    ) +
+    ggplot2::labs(x = cat_var, y = num_var)
+}
+
+```
+
+## Worked Examples for the narrative
+
+### Single year — North Carolina, AGEP by SEX
+
+```{r}
+# helper to ensure S3 class stays after any operations
+as_census <- function(x){
+  class(x) <- unique(c("census", class(x)))
+  x
+}
+
+# Smaller, quick: one state only
+nc <- as_census(query(2022, num_var = c('AGEP'), cat_var = c('SEX'), geography = 'North Carolina'))
+summary(nc)
+plot(nc, num_var = 'AGEP', cat_var = 'SEX')
+```
+
+### Multi-year — Iowa, GASP by HISPEED (2017 & 2021)
+
+```{r}
+ex <- as_census(multiyr_query(yrs = c(2017, 2021),
+                              num_var = c('GASP'),
+                              cat_var = c('HISPEED'),
+                              geography = 'Iowa'))
+summary(ex)
+
+plot(ex, num_var = 'GASP', cat_var = 'HISPEED')
+```
+
+## Interesting Observations
+
+Using 2022 ACS data for **North Carolina**, we compared the distribution of **age (AGEP)** between males and females.\
+The weighted mean age was **39.6 years** with a standard deviation of **23.2 years**, based on about **10.7 million weighted individuals**.\
+The weighted counts showed **\~5.2 million males** and **\~5.5 million females**, suggesting a balanced gender distribution.\
+The weighted boxplot confirmed that both sexes had a wide and overlapping age distribution, with no substantial differences in central tendency or spread.
+
+We also examined **gas utility costs (GASP)** by **high-speed internet access (HISPEED)** in **Iowa** for 2017 and 2021.\
+The weighted mean gas cost was **\$49.4** with a standard deviation of **\$74.4**, across approximately **6.3 million weighted households**.\
+Households with internet access (“Yes”) represented the largest group (**\~4.5 million**), followed by those without access (“No”, **\~1.0 million**), and those where internet status was not applicable (“N/A”, **\~0.8 million**).\
+The boxplots showed that gas costs were generally higher and more variable in households with internet access, while the N/A group had consistently lower costs.\
+This suggests a potential link between household resources (like internet access) and utility expenditures, although further analysis would be needed to confirm causality.
+
+Overall, these examples illustrate how the functions we built can query ACS PUMS data, apply weights, and generate meaningful summaries and plots.\
+By adjusting arguments such as `geography`, `num_var`, and `cat_var`, we can explore many other combinations of states, years, and household characteristics to uncover additional patterns.
